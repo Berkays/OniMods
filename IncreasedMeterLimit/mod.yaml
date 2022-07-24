@@ -1,0 +1,3 @@
+title: "Increased Meter Limits" 
+description: "Increases default 200 unit limit for Liquid/Gas/Conveyor meter. Values are configurable seperately in mod options."
+staticID: "Rubacava.IncreasedMeterLimits" 
