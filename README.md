@@ -1,8 +1,8 @@
 # List of Mods
 |**Mod**|**Description**|
 |---|---|
-|[Increased Meter Limits](https://steamcommunity.com/sharedfiles/filedetails/?id=1870696175)|Increases default unit limit for Liquid/Gas/Conveyor meters.|
-|[Dispenser Edibles](https://steamcommunity.com/sharedfiles/filedetails/?id=1960947963)|Allows edibles to be used in storage dispensers.|
+|[Increased Meter Limits](https://steamcommunity.com/sharedfiles/filedetails/?id=2839508628)|Increases default unit limit for Liquid/Gas/Conveyor meters.|
+|[Dispenser Edibles](https://steamcommunity.com/sharedfiles/filedetails/?id=2839845786)|Allows edibles to be used in storage dispensers.|
 
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  
