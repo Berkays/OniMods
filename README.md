@@ -7,4 +7,4 @@
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  
 [@Peter Han](https://github.com/peterhaneve), for [PLib](https://github.com/peterhaneve/ONIMods/tree/main/PLib)  
-[@Cairath](https://github.com/Cairath), for [ONI Modding Guide](https://github.com/Cairath/Oxygen-Not-Included-Modding/wikiModpack)  
+[@Cairath](https://github.com/Cairath), for [ONI Modding Guide](https://github.com/Cairath/Oxygen-Not-Included-Modding)  
