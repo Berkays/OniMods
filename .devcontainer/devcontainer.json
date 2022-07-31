@@ -1,0 +1,11 @@
+{
+    "name": "Oxygen Not Included Mono",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/workspace",
+    "settings": {},
+    "extensions": [
+        "eamodio.gitlens",
+        "ms-dotnettools.csharp"
+    ]
+}
