@@ -6,6 +6,9 @@
 # Game libs
 /lib
 
+# MacOs files
+.DS_Store
+
 # User-specific files
 *.suo
 *.user
