@@ -3,6 +3,7 @@
 |---|---|
 |[Increased Meter Limits](https://steamcommunity.com/sharedfiles/filedetails/?id=2839508628)|Increases default unit limit for Liquid/Gas/Conveyor meters.|
 |[Dispenser Edibles](https://steamcommunity.com/sharedfiles/filedetails/?id=2839845786)|Allows edibles to be used in storage dispensers.|
+|[No Radiation Exposure Animation](https://steamcommunity.com/sharedfiles/filedetails/?id=2843427720)|Disables duplicant radiation exposure animation.|
 
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  
