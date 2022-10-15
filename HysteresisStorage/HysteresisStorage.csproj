@@ -73,6 +73,7 @@
     <Compile Include="HysteresisStorageMod.cs" />
     <Compile Include="HysteresisStoragePatches.cs" />
     <Compile Include="HysteresisStorageLogic.cs" />
+    <Compile Include="IEventDispose.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\HysteresisStorageSideScreen.cs" />
     <Compile Include="UI\HysteresisStorageToggleButton.cs" />

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace HysteresisStorage.UI
 {
-    internal class HysteresisStorageSideScreen : SideScreenContent
+    internal class HysteresisStorageSideScreen : SideScreenContent, IEventDispose
     {
         private IUserControlledCapacity target;
         private HysteresisStorageLogic targetLogicComponent;
@@ -101,10 +101,22 @@ namespace HysteresisStorage.UI
 
         public override void ClearTarget()
         {
-            targetLogicComponent.OnCapacityChangedEvent -= RefreshSliderRange;
-            targetLogicComponent.GetComponent<ToggleButton>().OnHysteresisToggleEvent -= ToggleContent;
+            ((IEventDispose)this).UnregisterAllDelegates();
 
             base.ClearTarget();
+        }
+
+        void IEventDispose.UnregisterAllDelegates()
+        {
+            System.Delegate[] delegates = this.OnValueChangedEvent?.GetInvocationList();
+            if (delegates != null && delegates.Length > 0)
+            {
+                foreach (System.Delegate del in delegates)
+                {
+                    System.Action<float> customHandler = (System.Action<float>)del;
+                    this.OnValueChangedEvent -= customHandler;
+                }
+            }
         }
 
         private void ReceiveValueFromSlider(float newValue)

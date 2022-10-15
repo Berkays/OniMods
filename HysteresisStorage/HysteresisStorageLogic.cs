@@ -6,7 +6,7 @@ using UnityEngine;
 namespace HysteresisStorage
 {
     [SerializationConfig(MemberSerialization.OptIn)]
-    public class HysteresisStorageLogic : KMonoBehaviour
+    public class HysteresisStorageLogic : KMonoBehaviour, IEventDispose
     {
         [Serialize]
         public bool onceFull = false;
@@ -85,9 +85,22 @@ namespace HysteresisStorage
 
         protected override void OnCleanUp()
         {
-            base.OnCleanUp();
+            ((IEventDispose)this).UnregisterAllDelegates();
 
-            this.toggleButton.OnHysteresisToggleEvent -= onToggle;
+            base.OnCleanUp();
+        }
+
+        void IEventDispose.UnregisterAllDelegates()
+        {
+            System.Delegate[] delegates = this.OnCapacityChangedEvent?.GetInvocationList();
+            if (delegates != null && delegates.Length > 0)
+            {
+                foreach (System.Delegate del in delegates)
+                {
+                    System.Action<float> customHandler = (System.Action<float>)del;
+                    this.OnCapacityChangedEvent -= customHandler;
+                }
+            }
         }
 
         private static void OnCopySettings(HysteresisStorageLogic comp, object data)
@@ -135,6 +148,5 @@ namespace HysteresisStorage
         {
             OnCapacityChangedEvent?.Invoke(userControlledCapacity.UserMaxCapacity);
         }
-
     }
 }

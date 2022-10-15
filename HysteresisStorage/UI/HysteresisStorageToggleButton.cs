@@ -5,7 +5,7 @@ using UnityEngine;
 namespace HysteresisStorage
 {
     [SerializationConfig(MemberSerialization.OptIn)]
-    public class ToggleButton : KMonoBehaviour, ISaveLoadable, IToggleHandler
+    public class ToggleButton : KMonoBehaviour, ISaveLoadable, IToggleHandler, IEventDispose
     {
         [Serialize]
         private bool isComponentEnabled = false;
@@ -47,6 +47,7 @@ namespace HysteresisStorage
         protected override void OnCleanUp()
         {
             Unsubscribe((int)GameHashes.RefreshUserMenu);
+            ((IEventDispose)this).UnregisterAllDelegates();
 
             base.OnCleanUp();
         }
@@ -71,6 +72,19 @@ namespace HysteresisStorage
             ? new KIconButtonMenu.ButtonInfo("", HysteresisStorage.UI.STRINGS.USERMENUACTIONS.NAME_OFF, OnMenuToggle, Action.NumActions, null, null, null, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.TOOLTIP_OFF)
             : new KIconButtonMenu.ButtonInfo("action_building_disabled", HysteresisStorage.UI.STRINGS.USERMENUACTIONS.NAME, OnMenuToggle, Action.NumActions, null, null, null, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.TOOLTIP);
             Game.Instance.userMenu.AddButton(base.gameObject, buttonInfo);
+        }
+
+        void IEventDispose.UnregisterAllDelegates()
+        {
+            System.Delegate[] delegates = this.OnHysteresisToggleEvent?.GetInvocationList();
+            if (delegates != null && delegates.Length > 0)
+            {
+                foreach (System.Delegate del in delegates)
+                {
+                    System.Action<bool> customHandler = (System.Action<bool>)del;
+                    this.OnHysteresisToggleEvent -= customHandler;
+                }
+            }
         }
     }
 }
