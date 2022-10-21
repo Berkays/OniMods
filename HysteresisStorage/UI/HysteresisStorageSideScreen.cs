@@ -80,7 +80,7 @@ namespace HysteresisStorage.UI
             target = new_target.GetComponent<IUserControlledCapacity>();
 
             var maxValue = Mathf.Max(0, target.UserMaxCapacity - 1);
-            var value = Mathf.Min(slider.maxValue, targetLogicComponent.MinUserStorage);
+            var value = Mathf.Min(maxValue, targetLogicComponent.MinUserStorage);
             slider.minValue = 0;
             slider.maxValue = maxValue;
             slider.value = value;
