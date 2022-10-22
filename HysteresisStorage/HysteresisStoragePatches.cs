@@ -92,6 +92,14 @@ namespace HysteresisStorage
         [HarmonyPatch("OnFilterChanged")]
         public class FilteredStorage_OnFilterChanged_Patch
         {
+            delegate void CachedMethod(FilteredStorage instance);
+            delegate T CachedMethod<T>(FilteredStorage instance);
+            private static CachedMethod<float> GetMaxCapacityMinusStorageMarginDelegate = (CachedMethod<float>)typeof(FilteredStorage).GetMethod("GetMaxCapacityMinusStorageMargin", BindingFlags.Instance | BindingFlags.NonPublic).CreateDelegate(typeof(CachedMethod<float>));
+            private static CachedMethod<float> GetAmountStoredDelegate = (CachedMethod<float>)typeof(FilteredStorage).GetMethod("GetAmountStored", BindingFlags.Instance | BindingFlags.NonPublic).CreateDelegate(typeof(CachedMethod<float>));
+            private static CachedMethod<float> GetMaxCapacityDelegate = (CachedMethod<float>)typeof(FilteredStorage).GetMethod("GetMaxCapacity", BindingFlags.Instance | BindingFlags.NonPublic).CreateDelegate(typeof(CachedMethod<float>));
+            private static CachedMethod<bool> IsFunctionalDelegate = (CachedMethod<bool>)typeof(FilteredStorage).GetMethod("IsFunctional", BindingFlags.Instance | BindingFlags.NonPublic).CreateDelegate(typeof(CachedMethod<bool>));
+            private static CachedMethod OnFetchCompleteDelegate = (CachedMethod)typeof(FilteredStorage).GetMethod("OnFetchComplete", BindingFlags.Instance | BindingFlags.NonPublic).CreateDelegate(typeof(CachedMethod));
+
             public static bool Prefix(HashSet<Tag> tags, FilteredStorage __instance, ref FetchList2 ___fetchList, Storage ___storage, ChoreType ___choreType, Tag[] ___forbiddenTags)
             {
                 bool flag = tags != null && tags.Count != 0;
@@ -111,29 +119,23 @@ namespace HysteresisStorage
                 if (hysteresisStorage.HysteresisEnabled == false)
                     return true;
 
-                var GetMaxCapacityMinusStorageMarginMethodInfo = typeof(FilteredStorage).GetMethod("GetMaxCapacityMinusStorageMargin", BindingFlags.Instance | BindingFlags.NonPublic);
-                var GetAmountStoredMethodInfo = typeof(FilteredStorage).GetMethod("GetAmountStored", BindingFlags.Instance | BindingFlags.NonPublic);
-                var GetMaxCapacityMethodInfo = typeof(FilteredStorage).GetMethod("GetMaxCapacity", BindingFlags.Instance | BindingFlags.NonPublic);
-                var IsFunctionalMethodInfo = typeof(FilteredStorage).GetMethod("IsFunctional", BindingFlags.Instance | BindingFlags.NonPublic);
-                var OnFetchCompleteMethodInfo = typeof(FilteredStorage).GetMethod("OnFetchComplete", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                float maxCapacityMinusStorageMargin = (float)GetMaxCapacityMinusStorageMarginMethodInfo.Invoke(__instance, new object[0]);
-                float amountStored = (float)GetAmountStoredMethodInfo.Invoke(__instance, new object[0]);
+                float maxCapacityMinusStorageMargin = GetMaxCapacityMinusStorageMarginDelegate(__instance);
+                float amountStored = GetAmountStoredDelegate(__instance);
                 float num = Mathf.Max(0f, maxCapacityMinusStorageMargin - amountStored);
 
-                bool isFunctional = (bool)IsFunctionalMethodInfo.Invoke(__instance, new object[0]);
+                bool isFunctional = IsFunctionalDelegate(__instance);
 
                 if (num > 0f && flag && isFunctional && (amountStored <= hysteresisStorage.MinUserStorage || hysteresisStorage.onceFull == false))
                 {
                     System.Action onFetchComplete = () =>
                     {
-                        float _amountStored = (float)GetAmountStoredMethodInfo.Invoke(__instance, new object[0]);
+                        float _amountStored = GetAmountStoredDelegate(__instance);
                         if (_amountStored < hysteresisStorage.MinUserStorage)
                             hysteresisStorage.onceFull = false;
-                        OnFetchCompleteMethodInfo.Invoke(__instance, new object[0]);
+                        OnFetchCompleteDelegate(__instance);
                     };
 
-                    float maxCapacity = (float)GetMaxCapacityMethodInfo.Invoke(__instance, new object[0]);
+                    float maxCapacity = GetMaxCapacityDelegate(__instance);
                     num = Mathf.Max(0f, maxCapacity - amountStored);
 
                     ___fetchList = new FetchList2(___storage, ___choreType);
