@@ -148,15 +148,16 @@ namespace HysteresisStorage.UI
             var maxValue = Mathf.Max(0, newMaxCapacity - 1);
             var value = Mathf.Min(maxValue, slider.value);
 
-            slider.value = value;
-            numberInput.currentValue = value;
+            if (slider.value != value)
+            {
+                slider.value = value;
+                numberInput.currentValue = value;
+                numberInput.SetDisplayValue(value.ToString());
+                targetLogicComponent.MinUserStorage = value;
+            }
 
             numberInput.maxValue = maxValue;
             slider.maxValue = maxValue;
-
-            numberInput.SetDisplayValue(value.ToString());
-
-            targetLogicComponent.MinUserStorage = value;
         }
 
 

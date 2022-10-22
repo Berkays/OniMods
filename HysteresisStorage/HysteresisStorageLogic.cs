@@ -14,6 +14,8 @@ namespace HysteresisStorage
         [Serialize]
         private float minUserStorage = 0;
 
+        private float lastMaxCapacity = -1;
+
         public float MinUserStorage
         {
             get
@@ -146,7 +148,14 @@ namespace HysteresisStorage
 
         public void ForceCapacityChangeRefresh()
         {
-            OnCapacityChangedEvent?.Invoke(userControlledCapacity.UserMaxCapacity);
+            if (userControlledCapacity.UserMaxCapacity != this.lastMaxCapacity)
+            {
+                // Reset hysteresis state
+                this.onceFull = false;
+
+                this.lastMaxCapacity = userControlledCapacity.UserMaxCapacity;
+                OnCapacityChangedEvent?.Invoke(userControlledCapacity.UserMaxCapacity);
+            }
         }
     }
 }
