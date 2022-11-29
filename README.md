@@ -5,6 +5,7 @@
 |[Dispenser Edibles](https://steamcommunity.com/sharedfiles/filedetails/?id=2839845786)|Allows edibles to be used in storage dispensers.|
 |[No Radiation Exposure Animation](https://steamcommunity.com/sharedfiles/filedetails/?id=2843427720)|Disables duplicant radiation exposure animation.|
 |[Hysteresis Storage](https://steamcommunity.com/sharedfiles/filedetails/?id=2875347670)|Prevent duplicants from storing items below specified threshold.|
+|[Violent Volcanoes](https://steamcommunity.com/sharedfiles/filedetails/?id=2895288475)|Volcanoes emit dangerous rocks while erupting.|
 
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  
