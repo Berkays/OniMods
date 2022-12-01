@@ -58,7 +58,7 @@ namespace ViolentVolcanoes
                 })
                 .Update((smi, dt) =>
                 {
-                    if (smi.master.configuration.typeId == GeyserGenericConfig.SmallVolcano || smi.master.configuration.typeId == GeyserGenericConfig.BigVolcano)
+                    if (smi.master.configuration.typeId == GeyserGenericConfig.SmallVolcano || smi.master.configuration.typeId == GeyserGenericConfig.BigVolcano && smi.GetComponent<ElementEmitter>().isEmitterBlocked == false)
                     {
                         // Start violence
                         Burst(smi);
