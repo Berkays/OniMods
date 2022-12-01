@@ -21,7 +21,7 @@ namespace ViolentVolcanoes
             Comet comet = gameObject.AddOrGet<Comet>();
             comet.massRange = new Vector2(mass - 5f, mass + 5f);
             comet.EXHAUST_ELEMENT = SimHashes.Magma;
-            comet.EXHAUST_RATE = mass * 0.8f;
+            comet.EXHAUST_RATE = mass * 0.6f;
             comet.temperatureRange = new Vector2(1650f, 1750f);
             comet.entityDamage = 2;
             comet.totalTileDamage = 0.8f;
