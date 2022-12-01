@@ -92,14 +92,34 @@ namespace ViolentVolcanoes
                     if (!ViolentVolcanoesMod.Config.CreateDiamondTiles)
                         comet.addTiles = 0;
 
-
                     PrimaryElement primaryElement = comet.gameObject.AddOrGet<PrimaryElement>();
                     primaryElement.Temperature = volcanoTemp;
 
                     float angle = UnityEngine.Random.Range(30f + (i * 40f) - (i * 10f), 30f + ((i + 1) * 40f) + ((COMET_COUNT - i) * 10f));
                     float rad = angle * Mathf.Deg2Rad;
-                    comet.Velocity = new Vector2((0f - Mathf.Cos(rad)) * 12f, Mathf.Sin(rad) * 14f);
+
+                    float xVelocity = 0f - (Mathf.Cos(rad) * 6f);
+                    if (xVelocity < 0)
+                        xVelocity = Math.Max(-5f, Math.Min(-1.5f, xVelocity));
+                    else
+                        xVelocity = Math.Max(5f, Math.Max(1.5f, xVelocity));
+                    comet.Velocity = new Vector2(xVelocity, Mathf.Sin(rad) * 10f);
                     comet.GetComponent<KBatchedAnimController>().Rotation = (-angle) - 90f;
+                }
+            }
+        }
+
+        [HarmonyPatch(declaringType: typeof(Comet))]
+        [HarmonyPatch(nameof(Comet.Sim33ms))]
+        public class Comet_Sim33ms_Patch
+        {
+            private const float gravity = 16f;
+            static void Postfix(Comet __instance, float dt)
+            {
+                if (__instance.EXHAUST_ELEMENT == SimHashes.Magma)
+                {
+                    __instance.Velocity = new Vector2(__instance.Velocity.x, __instance.Velocity.y - (gravity * dt));
+                    __instance.GetComponent<KBatchedAnimController>().Rotation = -Vector2.SignedAngle(__instance.Velocity, Vector2.down);
                 }
             }
         }
