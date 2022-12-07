@@ -1,10 +1,11 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using HarmonyLib;
 using UnityEngine;
 using PeterHan.PLib.PatchManager;
 using PeterHan.PLib.Core;
+using KMod;
 
 namespace SweepZones
 {
@@ -25,6 +26,12 @@ namespace SweepZones
             base.OnLoad(harmony);
             PUtil.InitLibrary();
             new PPatchManager(harmony).RegisterPatchClass(typeof(SweepZonePatches));
+        }
+
+        public override void OnAllModsLoaded(Harmony harmony, IReadOnlyList<Mod> mods)
+        {
+            base.OnAllModsLoaded(harmony, mods);
+            ModIntegrations.LoadIntegrations();
         }
 
         [HarmonyPatch(typeof(Db))]

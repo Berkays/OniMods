@@ -17,8 +17,11 @@ namespace SweepZones
 
         public SweepZoneOverlay()
         {
-            for (int i = 0; i < CommonProps.PRIORITY_COLORS.Length; i++)
+            for (int i = 0; i < CommonProps.PRIORITY_COLORS.Length - 1; i++)
                 legend.Add(new LegendEntry($"Priority {i + 1}", "", CommonProps.PRIORITY_COLORS[i]));
+
+            if (ModIntegrations.ForbidItemsConfiguration.Enabled)
+                legend.Add(new LegendEntry("Forbidden Zone", "", CommonProps.FORBID_COLOR));
 
             legendFilters = CreateDefaultFilters();
         }
@@ -28,7 +31,7 @@ namespace SweepZones
             if (!SaveState.Instance.ContainsCell(cell))
                 return Color.black;
 
-            return CommonProps.PRIORITY_COLORS[SaveState.Instance[cell] - 1];
+            return CommonProps.PRIORITY_COLORS[SaveState.Instance[cell].priority_value - 1];
         }
 
         public override void Disable()

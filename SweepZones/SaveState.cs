@@ -16,7 +16,17 @@ namespace SweepZones
             Instance = this;
         }
 
-        public int this[int cell]
+        [OnDeserialized]
+        private void OnDeserialized()
+        {
+            // Remove any forbidden cells from serialized data
+            if (ModIntegrations.ForbidItemsConfiguration.Enabled == false && zones.Any(n => n.Value.priority_value == 10))
+            {
+                var forbiddenCells = zones.Where(n => n.Value.priority_value >= 10).Select(k => k.Key);
+                foreach (var cell in forbiddenCells)
+                    zones.Remove(cell);
+            }
+        }
         {
             get
             {

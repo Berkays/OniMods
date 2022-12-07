@@ -175,6 +175,24 @@ namespace SweepZones
                 options.Add(option.ToolMode, option);
                 toggle.onClick += () => OnClick(checkbox);
             }
+
+            // Forbid Items
+            if (ModIntegrations.ForbidItemsConfiguration.Enabled == false)
+                return;
+
+            widgetPrefab = Util.KInstantiateUI(prefab, choiceList, true);
+            PUIElements.SetText(widgetPrefab, "Forbid Zone");
+            toggle = widgetPrefab.GetComponentInChildren<MultiToggle>();
+            if (toggle != null)
+            {
+                var checkbox = toggle.gameObject;
+                var option = new MenuOption(ToolMode.Forbid, checkbox);
+
+                PCheckBox.SetCheckState(checkbox, PCheckBox.STATE_PARTIAL);
+                option.State = ToolParameterMenu.ToggleState.Off;
+                options.Add(option.ToolMode, option);
+                toggle.onClick += () => OnClick(checkbox);
+            }
         }
 
         public void SetAll(ToolParameterMenu.ToggleState toggleState)
@@ -193,7 +211,8 @@ namespace SweepZones
         public enum ToolMode
         {
             Set = 0,
-            Clear = 1
+            Forbid = 1,
+            Clear = 2
         }
 
         private sealed class MenuOption

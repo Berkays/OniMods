@@ -88,15 +88,20 @@ namespace SweepZones
         {
             selectedMode = toolMode;
 
-            if (selectedMode == SweepToolMenu.ToolMode.Set)
+            switch (selectedMode)
             {
-                toolRenderer.sprite = SweepZones.ICONS.SET_VISUALIZER_SPRITE;
-                ToolMenu.Instance.PriorityScreen.Show(true);
-            }
-            else
-            {
-                ToolMenu.Instance.PriorityScreen.Show(false);
-                toolRenderer.sprite = SweepZones.ICONS.CANCEL_VISUALIZER_SPRITE;
+                case SweepToolMenu.ToolMode.Set:
+                    toolRenderer.sprite = ICONS.SET_VISUALIZER_SPRITE;
+                    ToolMenu.Instance.PriorityScreen.Show(true);
+                    break;
+                case SweepToolMenu.ToolMode.Clear:
+                    toolRenderer.sprite = ICONS.CANCEL_VISUALIZER_SPRITE;
+                    ToolMenu.Instance.PriorityScreen.Show(false);
+                    break;
+                case SweepToolMenu.ToolMode.Forbid:
+                    toolRenderer.sprite = ICONS.SET_VISUALIZER_SPRITE;
+                    ToolMenu.Instance.PriorityScreen.Show(false);
+                    break;
             }
         }
         protected override void OnDragComplete(Vector3 cursorDown, Vector3 cursorUp)
@@ -128,15 +133,20 @@ namespace SweepZones
 
                         if (Grid.IsValidCell(cell) && Grid.IsVisible(cell) && Grid.Element[cell].id != SimHashes.Unobtanium)
                         {
-                            // Clear zone
-                            if (SweepToolMenu.Instance.GetState(SweepToolMenu.ToolMode.Clear) == ToolParameterMenu.ToggleState.On)
+                            switch (selectedMode)
                             {
-                                SaveState.Instance.DeleteCell(cell);
-                                continue;
+                                case SweepToolMenu.ToolMode.Clear:
+                                    SaveState.Instance.DeleteCell(cell);
+                                    break;
+                                case SweepToolMenu.ToolMode.Set:
+                                    SaveState.Instance[cell] = priority;
+                                    break;
+                                case SweepToolMenu.ToolMode.Forbid:
+                                    SaveState.Instance[cell] = new PrioritySetting(PriorityScreen.PriorityClass.basic, 10);
+                                    break;
+                                default:
+                                    break;
                             }
-
-                            // Set sweep
-                            SaveState.Instance[cell] = priority.priority_value;
                         }
                     }
                 }

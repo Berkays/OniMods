@@ -73,6 +73,7 @@
     <Compile Include="SweepToolMenu.cs" />
     <Compile Include="CommonProps.cs" />
     <Compile Include="SaveState.cs" />
+    <Compile Include="ModIntegrations.cs" />
     <Compile Include="UI\STRINGS.cs" />
     <Compile Include="UI\Assets.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
