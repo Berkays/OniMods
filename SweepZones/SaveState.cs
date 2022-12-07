@@ -1,17 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Serialization;
 using KSerialization;
 
 namespace SweepZones
 {
-    public class SaveState : KMonoBehaviour, IEnumerable<KeyValuePair<int, int>>
+    internal class SaveState : KMonoBehaviour, IEnumerable<KeyValuePair<int, PrioritySetting>>
     {
         [Serialize]
-        private readonly Dictionary<int, int> zones = new Dictionary<int, int>();
+        private readonly Dictionary<int, PrioritySetting> zones = new Dictionary<int, PrioritySetting>();
 
         internal static SaveState Instance { get; private set; }
 
-        public SaveState()
+        internal SaveState()
         {
             Instance = this;
         }
@@ -27,13 +29,15 @@ namespace SweepZones
                     zones.Remove(cell);
             }
         }
+
+        internal PrioritySetting this[int cell]
         {
             get
             {
                 if (this.zones != null)
                     return this.zones[cell];
 
-                return 5;
+                return new PrioritySetting();
             }
 
             set
@@ -51,17 +55,17 @@ namespace SweepZones
             }
         }
 
-        public bool ContainsCell(int cell)
+        internal bool ContainsCell(int cell)
         {
             return zones.ContainsKey(cell);
         }
 
-        public void DeleteCell(int cell)
+        internal void DeleteCell(int cell)
         {
             zones.Remove(cell);
         }
 
-        public IEnumerator<KeyValuePair<int, int>> GetEnumerator()
+        IEnumerator<KeyValuePair<int, PrioritySetting>> IEnumerable<KeyValuePair<int, PrioritySetting>>.GetEnumerator()
         {
             return this.zones.GetEnumerator();
         }
