@@ -25,8 +25,11 @@ namespace SweepZones
             drawer.DrawIcon(screenInstance.GetSprite("icon_mouse_right"), 20);
             drawer.DrawText("Back", Styles_Instruction.Standard);
 
-            drawer.NewLine();
-            drawer.DrawText(string.Format("Sweep Priority {0}", ToolMenu.Instance.PriorityScreen.GetLastSelectedPriority().priority_value.ToString()), Styles_Title.Standard);
+            if (SweepToolMenu.Instance.GetState(SweepToolMenu.ToolMode.Set) == ToolParameterMenu.ToggleState.On)
+            {
+                drawer.NewLine();
+                drawer.DrawText(string.Format("Sweep Priority {0}", ToolMenu.Instance.PriorityScreen.GetLastSelectedPriority().priority_value.ToString()), Styles_Title.Standard);
+            }
 
             drawer.EndShadowBar();
             drawer.EndDrawing();
