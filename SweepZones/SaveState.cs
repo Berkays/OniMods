@@ -22,9 +22,9 @@ namespace SweepZones
         private void OnDeserialized()
         {
             // Remove any forbidden cells from serialized data
-            if (ModIntegrations.ForbidItemsConfiguration.Enabled == false && zones.Any(n => n.Value.priority_value == 10))
+            if (ModIntegrations.ForbidItemsConfiguration.Enabled == false && zones != null && zones.Any(n => n.Value.priority_value == 10))
             {
-                var forbiddenCells = zones.Where(n => n.Value.priority_value >= 10).Select(k => k.Key);
+                var forbiddenCells = zones.Where(n => n.Value.priority_value >= 10).Select(k => k.Key).ToList();
                 foreach (var cell in forbiddenCells)
                     zones.Remove(cell);
             }
