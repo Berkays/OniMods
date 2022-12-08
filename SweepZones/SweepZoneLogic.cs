@@ -27,7 +27,7 @@ namespace SweepZones
                             obj2.GetComponent<Clearable>().MarkForClear();
                             Prioritizable component = obj2.GetComponent<Prioritizable>();
                             component?.SetMasterPriority(prioritySetting);
-                            return;
+                            continue;
                         }
 
                         if (ModIntegrations.ForbidItemsConfiguration.Enabled && priorityValue == 10 && checkForbidCondition(obj2, out KPrefabID kpid))
