@@ -45,13 +45,7 @@ namespace SweepZones
                 if (this.zones == null)
                     return;
 
-                if (this.zones.ContainsKey(cell))
-                {
-                    this.zones[cell] = value;
-                    return;
-                }
-
-                this.zones.Add(cell, value);
+                this.zones[cell] = value;
             }
         }
 

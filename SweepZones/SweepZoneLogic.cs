@@ -19,7 +19,7 @@ namespace SweepZones
                     GameObject obj2 = objectLayerListItem.gameObject;
                     objectLayerListItem = objectLayerListItem.nextItem;
 
-                    if (!(obj2 == null) && !(obj2.GetComponent<MinionIdentity>() != null) && obj2.GetComponent<Clearable>().isClearable)
+                    if (obj2 != null && obj2.GetComponent<MinionIdentity>() == null && obj2.GetComponent<Clearable>().isClearable)
                     {
                         var priorityValue = prioritySetting.priority_value;
                         if (priorityValue < 10)

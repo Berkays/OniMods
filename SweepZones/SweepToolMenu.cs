@@ -74,8 +74,7 @@ namespace SweepZones
 
         public void HideMenu()
         {
-            if (content != null)
-                content.SetActive(false);
+            content?.SetActive(false);
         }
 
         private void OnChange()
