@@ -6,7 +6,7 @@ namespace SweepZones
 {
     public class SweepZoneTool : DragTool
     {
-        private SweepToolMenu.ToolMode selectedMode = SweepToolMenu.ToolMode.Set;
+        private ToolMode selectedMode = ToolMode.Sweep;
 
         private SpriteRenderer toolRenderer;
 
@@ -84,26 +84,35 @@ namespace SweepZones
             menu.HideMenu();
         }
 
-        private void OnToolSettingChange(SweepToolMenu.ToolMode toolMode)
+        private void OnToolSettingChange(ToolMode toolMode)
         {
             selectedMode = toolMode;
 
             switch (selectedMode)
             {
-                case SweepToolMenu.ToolMode.Set:
+                case ToolMode.Sweep:
                     toolRenderer.sprite = ICONS.SET_VISUALIZER_SPRITE;
                     ToolMenu.Instance.PriorityScreen.Show(true);
                     break;
-                case SweepToolMenu.ToolMode.Clear:
+                case ToolMode.Mop:
+                    toolRenderer.sprite = ICONS.SET_VISUALIZER_SPRITE;
+                    ToolMenu.Instance.PriorityScreen.Show(true);
+                    break;
+                case ToolMode.SweepClear:
                     toolRenderer.sprite = ICONS.CANCEL_VISUALIZER_SPRITE;
                     ToolMenu.Instance.PriorityScreen.Show(false);
                     break;
-                case SweepToolMenu.ToolMode.Forbid:
+                case ToolMode.MopClear:
+                    toolRenderer.sprite = ICONS.CANCEL_VISUALIZER_SPRITE;
+                    ToolMenu.Instance.PriorityScreen.Show(false);
+                    break;
+                case ToolMode.Forbid:
                     toolRenderer.sprite = ICONS.SET_VISUALIZER_SPRITE;
                     ToolMenu.Instance.PriorityScreen.Show(false);
                     break;
             }
         }
+
         protected override void OnDragComplete(Vector3 cursorDown, Vector3 cursorUp)
         {
             base.OnDragComplete(cursorDown, cursorUp);
@@ -135,14 +144,20 @@ namespace SweepZones
                         {
                             switch (selectedMode)
                             {
-                                case SweepToolMenu.ToolMode.Clear:
-                                    SaveState.Instance.DeleteCell(cell);
+                                case ToolMode.SweepClear:
+                                    SaveState.Instance.Sweep.DeleteCell(cell);
                                     break;
-                                case SweepToolMenu.ToolMode.Set:
-                                    SaveState.Instance[cell] = priority;
+                                case ToolMode.Sweep:
+                                    SaveState.Instance.Sweep[cell] = priority;
                                     break;
-                                case SweepToolMenu.ToolMode.Forbid:
-                                    SaveState.Instance[cell] = new PrioritySetting(PriorityScreen.PriorityClass.basic, 10);
+                                case ToolMode.MopClear:
+                                    SaveState.Instance.Mop.DeleteCell(cell);
+                                    break;
+                                case ToolMode.Mop:
+                                    SaveState.Instance.Mop[cell] = priority;
+                                    break;
+                                case ToolMode.Forbid:
+                                    SaveState.Instance.Sweep[cell] = new PrioritySetting(PriorityScreen.PriorityClass.basic, 10);
                                     break;
                                 default:
                                     break;

@@ -71,6 +71,7 @@
     <Compile Include="SweepZoneTool.cs" />
     <Compile Include="SweepZoneHoverCard.cs" />
     <Compile Include="SweepToolMenu.cs" />
+    <Compile Include="ToolMode.cs" />
     <Compile Include="CommonProps.cs" />
     <Compile Include="SaveState.cs" />
     <Compile Include="ModIntegrations.cs" />

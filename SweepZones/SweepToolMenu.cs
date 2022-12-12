@@ -10,10 +10,12 @@ namespace SweepZones
     {
         public static SweepToolMenu Instance { get; private set; }
 
-        public event System.Action<ToolMode> OnSettingChanged;
+        internal event System.Action<ToolMode> OnSettingChanged;
 
         public static void CreateInstance()
         {
+            DestroyInstance();
+
             var parameterMenu = new GameObject("SweepZoneSettingsChangeParams");
             var originalMenu = ToolMenu.Instance.toolParameterMenu;
             if (originalMenu != null)
@@ -43,7 +45,7 @@ namespace SweepZones
             }
         }
 
-        public ToolMode SelectedKey { get; private set; }
+        internal ToolMode SelectedKey { get; private set; }
 
         private GameObject choiceList;
         private GameObject content;
@@ -52,7 +54,7 @@ namespace SweepZones
         public SweepToolMenu()
         {
             options = new Dictionary<ToolMode, MenuOption>();
-            SelectedKey = ToolMode.Set;
+            SelectedKey = ToolMode.Sweep;
         }
 
         public void ClearMenu()
@@ -61,10 +63,10 @@ namespace SweepZones
             foreach (var option in options)
                 Destroy(option.Value.Checkbox);
             options.Clear();
-            SelectedKey = ToolMode.Set;
+            SelectedKey = ToolMode.Sweep;
         }
 
-        public ToolParameterMenu.ToggleState GetState(ToolMode key)
+        internal ToolParameterMenu.ToggleState GetState(ToolMode key)
         {
             var state = ToolParameterMenu.ToggleState.Off;
             if (options.TryGetValue(key, out MenuOption option))
@@ -101,21 +103,26 @@ namespace SweepZones
         private void OnClick(GameObject target)
         {
             foreach (var option in options.Values)
+            {
                 if (option.Checkbox == target)
                 {
                     if (option.State == ToolParameterMenu.ToggleState.Off)
                     {
                         // Set to on and all others to off
                         foreach (var disableOption in options.Values)
+                        {
                             if (disableOption != option)
                                 disableOption.State = ToolParameterMenu.ToggleState.Off;
+                        }
                         option.State = ToolParameterMenu.ToggleState.On;
                         SelectedKey = option.ToolMode;
-                        OnSettingChanged?.Invoke(option.ToolMode);
                         OnChange();
                     }
                     break;
                 }
+            }
+
+            OnSettingChanged?.Invoke(SelectedKey);
         }
 
         protected override void OnCleanUp()
@@ -123,6 +130,7 @@ namespace SweepZones
             ClearMenu();
             if (content != null)
                 Destroy(content);
+
             base.OnCleanUp();
         }
 
@@ -144,51 +152,34 @@ namespace SweepZones
 
         internal void PopulateMenu()
         {
-            var prefab = ToolMenu.Instance.toolParameterMenu.widgetPrefab;
             ClearMenu();
 
-            var widgetPrefab = Util.KInstantiateUI(prefab, choiceList, true);
-            PUIElements.SetText(widgetPrefab, "Set Zone");
-            var toggle = widgetPrefab.GetComponentInChildren<MultiToggle>();
-            if (toggle != null)
-            {
-                var checkbox = toggle.gameObject;
-                var option = new MenuOption(ToolMode.Set, checkbox);
-
-                PCheckBox.SetCheckState(checkbox, PCheckBox.STATE_PARTIAL);
-                option.State = ToolParameterMenu.ToggleState.On;
-                options.Add(option.ToolMode, option);
-                toggle.onClick += () => OnClick(checkbox);
-            }
-
-            widgetPrefab = Util.KInstantiateUI(prefab, choiceList, true);
-            PUIElements.SetText(widgetPrefab, "Clear Zone");
-            toggle = widgetPrefab.GetComponentInChildren<MultiToggle>();
-            if (toggle != null)
-            {
-                var checkbox = toggle.gameObject;
-                var option = new MenuOption(ToolMode.Clear, checkbox);
-
-                PCheckBox.SetCheckState(checkbox, PCheckBox.STATE_PARTIAL);
-                option.State = ToolParameterMenu.ToggleState.Off;
-                options.Add(option.ToolMode, option);
-                toggle.onClick += () => OnClick(checkbox);
-            }
+            createOption("Sweep Zone", ToolMode.Sweep, ToolParameterMenu.ToggleState.On);
+            createOption(ModIntegrations.ForbidItemsConfiguration.Enabled ? "Clear Sweep/Forbid" : "Clear Sweep Zone", ToolMode.SweepClear);
+            createOption("Mop Zone", ToolMode.Mop);
+            createOption("Clear Mop Zone", ToolMode.MopClear);
 
             // Forbid Items
             if (ModIntegrations.ForbidItemsConfiguration.Enabled == false)
                 return;
 
-            widgetPrefab = Util.KInstantiateUI(prefab, choiceList, true);
-            PUIElements.SetText(widgetPrefab, "Forbid Zone");
-            toggle = widgetPrefab.GetComponentInChildren<MultiToggle>();
+            createOption("Forbid Zone", ToolMode.Forbid);
+        }
+
+        private void createOption(string text, ToolMode mode, ToolParameterMenu.ToggleState state = ToolParameterMenu.ToggleState.Off)
+        {
+            GameObject originalObj = ToolMenu.Instance.toolParameterMenu.widgetPrefab;
+
+            GameObject widgetObj = Util.KInstantiateUI(originalObj, choiceList, true);
+            PUIElements.SetText(widgetObj, text);
+            MultiToggle toggle = widgetObj.GetComponentInChildren<MultiToggle>();
             if (toggle != null)
             {
                 var checkbox = toggle.gameObject;
-                var option = new MenuOption(ToolMode.Forbid, checkbox);
+                var option = new MenuOption(mode, checkbox);
 
                 PCheckBox.SetCheckState(checkbox, PCheckBox.STATE_PARTIAL);
-                option.State = ToolParameterMenu.ToggleState.Off;
+                option.State = state;
                 options.Add(option.ToolMode, option);
                 toggle.onClick += () => OnClick(checkbox);
             }
@@ -201,17 +192,27 @@ namespace SweepZones
             OnChange();
         }
 
+        internal void SetOption(ToolMode toolMode)
+        {
+            foreach (MenuOption option in options.Values)
+            {
+                if (option.ToolMode == toolMode)
+                {
+                    option.State = ToolParameterMenu.ToggleState.On;
+                    SelectedKey = option.ToolMode;
+                    continue;
+                }
+                option.State = ToolParameterMenu.ToggleState.Off;
+            }
+
+            OnChange();
+            OnSettingChanged?.Invoke(SelectedKey);
+        }
+
         public void ShowMenu()
         {
             content.SetActive(true);
             OnChange();
-        }
-
-        public enum ToolMode
-        {
-            Set = 0,
-            Forbid = 1,
-            Clear = 2
         }
 
         private sealed class MenuOption
