@@ -6,67 +6,96 @@ using KSerialization;
 
 namespace SweepZones
 {
-    internal class SaveState : KMonoBehaviour, IEnumerable<KeyValuePair<int, PrioritySetting>>
+    internal class SaveState : KMonoBehaviour
     {
         [Serialize]
         private readonly Dictionary<int, PrioritySetting> zones = new Dictionary<int, PrioritySetting>();
 
         internal static SaveState Instance { get; private set; }
 
+        [Serialize]
+        public State Sweep = new State();
+        [Serialize]
+        public State Mop = new State();
+
         internal SaveState()
         {
             Instance = this;
+
+            SweepZoneOverlay.SetupOverlays();
         }
 
         [OnDeserialized]
         private void OnDeserialized()
         {
+            // Migrate old data
+            if (zones != null && zones.Count > 0)
+            {
+                Sweep.Clear();
+                foreach (var zone in zones)
+                    Sweep[zone.Key] = zone.Value;
+
+                zones.Clear();
+            }
+
             // Remove any forbidden cells from serialized data
-            if (ModIntegrations.ForbidItemsConfiguration.Enabled == false && zones != null && zones.Any(n => n.Value.priority_value == 10))
+            if (ModIntegrations.ForbidItemsConfiguration.Enabled == false && Sweep != null && Sweep.Any(n => n.Value.priority_value == 10))
             {
-                var forbiddenCells = zones.Where(n => n.Value.priority_value >= 10).Select(k => k.Key).ToList();
+                var forbiddenCells = Sweep.Where(n => n.Value.priority_value >= 10).Select(k => k.Key).ToList();
                 foreach (var cell in forbiddenCells)
-                    zones.Remove(cell);
+                    Sweep.DeleteCell(cell);
             }
         }
 
-        internal PrioritySetting this[int cell]
+        [SerializationConfig(MemberSerialization.OptIn)]
+        internal sealed class State : IEnumerable<KeyValuePair<int, PrioritySetting>>
         {
-            get
+            [Serialize]
+            private readonly Dictionary<int, PrioritySetting> zones = new Dictionary<int, PrioritySetting>();
+
+            internal PrioritySetting this[int cell]
             {
-                if (this.zones != null)
-                    return this.zones[cell];
+                get
+                {
+                    if (this.zones != null)
+                        return this.zones[cell];
 
-                return new PrioritySetting();
+                    return new PrioritySetting();
+                }
+
+                set
+                {
+                    if (this.zones == null)
+                        return;
+
+                    this.zones[cell] = value;
+                }
             }
 
-            set
+            internal void Clear()
             {
-                if (this.zones == null)
-                    return;
-
-                this.zones[cell] = value;
+                zones.Clear();
             }
-        }
 
-        internal bool ContainsCell(int cell)
-        {
-            return zones.ContainsKey(cell);
-        }
+            internal bool ContainsCell(int cell)
+            {
+                return zones.ContainsKey(cell);
+            }
 
-        internal void DeleteCell(int cell)
-        {
-            zones.Remove(cell);
-        }
+            internal void DeleteCell(int cell)
+            {
+                zones.Remove(cell);
+            }
 
-        IEnumerator<KeyValuePair<int, PrioritySetting>> IEnumerable<KeyValuePair<int, PrioritySetting>>.GetEnumerator()
-        {
-            return this.zones.GetEnumerator();
-        }
+            public IEnumerator<KeyValuePair<int, PrioritySetting>> GetEnumerator()
+            {
+                return zones.GetEnumerator();
+            }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return this.zones.GetEnumerator();
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                return zones.GetEnumerator();
+            }
         }
     }
 }
