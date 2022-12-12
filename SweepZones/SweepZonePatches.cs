@@ -42,6 +42,8 @@ namespace SweepZones
             {
                 Strings.Add(UI.STRINGS.OVERLAY_NAME.Key, UI.STRINGS.OVERLAY_NAME.Value);
                 Strings.Add(UI.STRINGS.OVERLAY_DESCRIPTION.Key, UI.STRINGS.OVERLAY_DESCRIPTION.Value);
+                Strings.Add($"STRINGS.UI.TOOLS.FILTERLAYERS.{UI.STRINGS.OVERLAY_STATE_SWEEP.Key}", UI.STRINGS.OVERLAY_STATE_SWEEP.Value);
+                Strings.Add($"STRINGS.UI.TOOLS.FILTERLAYERS.{UI.STRINGS.OVERLAY_STATE_MOP.Key}", UI.STRINGS.OVERLAY_STATE_MOP.Value);
             }
         }
 
@@ -188,6 +190,15 @@ namespace SweepZones
             internal static void Postfix()
             {
                 SweepToolMenu.CreateInstance();
+            }
+        }
+
+        [HarmonyPatch(typeof(Game), "DestroyInstances")]
+        public static class GameDestroyInstances
+        {
+            public static void Postfix()
+            {
+                SweepToolMenu.DestroyInstance();
             }
         }
     }
