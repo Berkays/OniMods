@@ -5,7 +5,7 @@ namespace SweepZones
     internal static class CommonProps
     {
         internal static readonly Color32 TOOL_COLOR = new Color32(255, 172, 52, 255);
-        internal static readonly Color32 FORBID_COLOR = new Color32(50, 255, 50, 150);
+        internal static readonly Color32 FORBID_COLOR = new Color32(60, 230, 60, 150);
 
         internal static readonly Color[] PRIORITY_COLORS = new Color[] {
         new Color32(102, 240, 248, 180),
@@ -13,7 +13,7 @@ namespace SweepZones
         new Color32(32, 126, 247, 180),
         new Color32(119, 27, 249, 180),
         new Color32(164, 60, 251, 180),
-        new Color32(201, 97, 254, 180),
+        new Color32(210, 125, 255, 180),
         new Color32(254, 105, 109, 180),
         new Color32(255, 60, 51, 180),
         new Color32(252, 3, 0, 180),
