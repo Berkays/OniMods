@@ -133,6 +133,8 @@ namespace SweepZones
                 }
 
                 var priority = ToolMenu.Instance.PriorityScreen.GetLastSelectedPriority();
+                if (priority.priority_value <= 0)
+                    return;
 
                 for (int x = x0; x <= x1; ++x)
                 {
