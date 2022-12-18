@@ -3,7 +3,6 @@
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{97F6C548-5246-4A82-89A0-D21B15318BD6}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -12,55 +11,49 @@
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
+    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
     <TargetFrameworkProfile />
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
-    <GenerateSerializationAssemblies>Auto</GenerateSerializationAssemblies>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="0Harmony">
       <HintPath>..\lib\0Harmony.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp">
       <HintPath>..\lib\Assembly-CSharp.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>..\lib\Assembly-CSharp-firstpass.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
     <Reference Include="UnityEngine">
       <HintPath>..\lib\UnityEngine.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\lib\UnityEngine.CoreModule.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>..\lib\UnityEngine.UI.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json">
-        <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
+      <Private>false</Private>
     </Reference>
     <Reference Include="PLib, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\PLib.4.8.1\lib\net471\PLib.dll</HintPath>
@@ -85,6 +78,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mono $(MSBuildProjectDirectory)\..\packages\ILRepack.2.0.18\tools\ILRepack.exe /ndebug /lib:../lib /out:$(TargetName).dll $(TargetName).dll PLib.dll /targetplatform:v4</PostBuildEvent>
+    <PostBuildEvent>mono $(MSBuildProjectDirectory)\..\packages\ILRepack.2.0.18\tools\ILRepack.exe /ndebug /lib:$(MSBuildProjectDirectory)\..\lib /out:$(TargetName).dll $(TargetName).dll PLib.dll /targetplatform:v4</PostBuildEvent>
   </PropertyGroup>
 </Project>
