@@ -7,6 +7,7 @@
 |[Hysteresis Storage](https://steamcommunity.com/sharedfiles/filedetails/?id=2875347670)|Prevent duplicants from storing items below specified threshold.|
 |[Violent Volcanoes](https://steamcommunity.com/sharedfiles/filedetails/?id=2895288475)|Volcanoes emit dangerous rocks while erupting.|
 |[Sweep Zones](https://steamcommunity.com/sharedfiles/filedetails/?id=2897886291)|Sweep zones automatically assign sweep errand to debris.|
+|[Configurable Timers](https://steamcommunity.com/sharedfiles/filedetails/?id=2904048344)|Set current time for timer sensors.|
 
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  
