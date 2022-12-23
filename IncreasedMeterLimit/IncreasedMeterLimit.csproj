@@ -46,9 +46,9 @@
       <HintPath>..\lib\Newtonsoft.Json.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="PLib, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="PLib">
       <HintPath>..\packages\PLib.4.8.1\lib\net471\PLib.dll</HintPath>
-      <Private>true</Private>
+      <Private>false</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="UnityEngine">
@@ -77,6 +77,6 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>mono $(MSBuildProjectDirectory)\..\packages\ILRepack.2.0.18\tools\ILRepack.exe /ndebug /lib:$(MSBuildProjectDirectory)\..\lib /out:$(TargetName).dll $(TargetName).dll PLib.dll /targetplatform:v4</PostBuildEvent>
+    <PostBuildEvent>eval "export MSBuildProjectDirectory=$(MSBuildProjectDirectory);export TargetName=$(TargetName);$(MSBuildProjectDirectory)\..\PostBuild.sh"</PostBuildEvent>
   </PropertyGroup>
 </Project>
