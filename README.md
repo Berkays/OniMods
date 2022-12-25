@@ -8,6 +8,7 @@
 |[Violent Volcanoes](https://steamcommunity.com/sharedfiles/filedetails/?id=2895288475)|Volcanoes emit dangerous rocks while erupting.|
 |[Sweep Zones](https://steamcommunity.com/sharedfiles/filedetails/?id=2897886291)|Sweep zones automatically assign sweep errand to debris.|
 |[Configurable Timers](https://steamcommunity.com/sharedfiles/filedetails/?id=2904048344)|Set current time for timer sensors.|
+|[Automation Bypass](https://steamcommunity.com/sharedfiles/filedetails/?id=2906743782)|Pass automation wires through bypassed ports.|
 
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  
