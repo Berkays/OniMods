@@ -51,6 +51,9 @@ namespace AutomationBypass
         protected override void OnSpawn()
         {
             base.OnSpawn();
+
+            if (this.IsEnabled)
+                statusGuid = selectable.AddStatusItem(AutomationBypassPatches.bypassStatusItem, this);
         }
 
         protected override void OnCleanUp()
