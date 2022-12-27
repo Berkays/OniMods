@@ -96,6 +96,9 @@ namespace AutomationBypass
 
         private void OnRefreshUserMenu(object data)
         {
+            if (this.TryGetComponent(out BuildingUnderConstruction underConstruction))
+                return;
+
             bool isEnabled = IsEnabled;
             KIconButtonMenu.ButtonInfo buttonInfo = null;
             buttonInfo = !isEnabled
