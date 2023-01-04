@@ -165,10 +165,13 @@ namespace ResourceSensor
 
         public void Sim1000ms(float dt)
         {
-            var selectedTags = treeFilterable.AcceptedTags;
-            if (selectedTags.Count == 0)
+            bool state;
+
+            if (treeFilterable.AcceptedTags.Count == 0)
             {
-                SetState(false);
+                currentCount = 0;
+                state = activateOnGreaterThan ? (0 > countThreshold) : (0 < countThreshold);
+                SetState(state);
 
                 if (this.visualizer.visCells.Count > 0)
                 {
@@ -186,7 +189,7 @@ namespace ResourceSensor
                 if (roomOfGameObject != null)
                 {
                     currentCount = CountRoom(roomOfGameObject);
-                    bool state = activateOnGreaterThan ? (currentCount > countThreshold) : (currentCount < countThreshold);
+                    state = activateOnGreaterThan ? (currentCount > countThreshold) : (currentCount < countThreshold);
 
                     if (selectable.HasStatusItem(Db.Get().BuildingStatusItems.NotInAnyRoom))
                         selectable.RemoveStatusItem(roomStatusGUID);
@@ -200,7 +203,8 @@ namespace ResourceSensor
                     roomStatusGUID = selectable.AddStatusItem(Db.Get().BuildingStatusItems.NotInAnyRoom);
 
                 currentCount = 0;
-                SetState(on: false);
+                state = activateOnGreaterThan ? (0 > countThreshold) : (0 < countThreshold);
+                SetState(state);
 
                 return;
             }
@@ -211,7 +215,7 @@ namespace ResourceSensor
             if (this.mode == SensorMode.Distance)
             {
                 currentCount = CountDistance();
-                bool state = activateOnGreaterThan ? (currentCount > countThreshold) : (currentCount < countThreshold);
+                state = activateOnGreaterThan ? (currentCount > countThreshold) : (currentCount < countThreshold);
                 SetState(state);
 
                 return;
@@ -220,7 +224,7 @@ namespace ResourceSensor
             if (this.mode == SensorMode.Global)
             {
                 currentCount = CountGlobal();
-                bool state = activateOnGreaterThan ? (currentCount > countThreshold) : (currentCount < countThreshold);
+                state = activateOnGreaterThan ? (currentCount > countThreshold) : (currentCount < countThreshold);
 
                 SetState(state);
             }
