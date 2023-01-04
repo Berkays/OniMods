@@ -9,6 +9,7 @@
 |[Sweep Zones](https://steamcommunity.com/sharedfiles/filedetails/?id=2897886291)|Sweep zones automatically assign sweep errand to debris.|
 |[Configurable Timers](https://steamcommunity.com/sharedfiles/filedetails/?id=2904048344)|Set current time for timer sensors.|
 |[Automation Bypass](https://steamcommunity.com/sharedfiles/filedetails/?id=2906743782)|Pass automation wires through bypassed ports.|
+|[Resource Sensor](https://steamcommunity.com/sharedfiles/filedetails/?id=2911545239)|Automation sensor that outputs logic based on counted materials.|
 
 # Credits
 [@pardeike](https://github.com/pardeike) for [Harmony](https://github.com/pardeike/Harmony)  

@@ -1,0 +1,30 @@
+A new automation sensor that outputs logic depending on selected materials, amount and count mode. Building is unlocked after Generic Sensors research and uses 25Kg of Refined metal. 
+
+There are 3 selectable counting modes:
+
+[list]
+[*][b]Distance Mode[/b]
+Count materials around the sensor up until specified distance.
+[*][b]Room Mode[/b]
+Count materials which are in the same room as the sensor.
+[*][b]Global Mode[/b]
+Count materials that are located in the current active cluster. This mode only counts dupe-accessible resources.
+[list]
+
+[h1] Credits [/h1]
+[b] Mod Art By [url=https://steamcommunity.com/profiles/76561198165502222]3GuB[/url][/b]
+
+[h1] Source [/h1]
+Source code for this and my other mods are available at [url=https://github.com/Berkays/OniMods]Github[/url]
+
+[h1]My Other Mods[/h1]
+[list]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2897886291]Sweep Zones[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2906743782]Automation Bypass[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2875347670]Hysteresis Storage[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2904048344]Configurable timers[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2895288475]Violent Volcanoes[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2839508628]Increased Meter Limits[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2839845786]Allow Edibles in Storage Dispensers[/url]
+    [*][url=https://steamcommunity.com/sharedfiles/filedetails/?id=2843427720]No Radiation Exposure Animation[/url]
+[/list]
