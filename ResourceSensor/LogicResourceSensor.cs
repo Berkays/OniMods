@@ -367,9 +367,7 @@ namespace ResourceSensor
         {
             var tags = treeFilterable.AcceptedTags;
 
-            int cameraActiveCluster = CameraController.Instance.cameraActiveCluster;
-
-            WorldInventory worldInventory = ClusterManager.Instance.GetWorld(cameraActiveCluster).worldInventory;
+            WorldInventory worldInventory = gameObject.GetMyWorld().worldInventory;
 
             float totalMass = 0f;
             foreach (var tag in tags)
