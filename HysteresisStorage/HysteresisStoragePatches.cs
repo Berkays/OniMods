@@ -68,15 +68,15 @@ namespace HysteresisStorage
             }
         }
 
-        // [HarmonyPatch(typeof(FishFeederConfig))]
-        // [HarmonyPatch(nameof(FishFeederConfig.ConfigureBuildingTemplate))]
-        // public static class FishFeederConfig_ConfigureBuildingTemplate_Patch
-        // {
-        //     private static void Postfix(GameObject go)
-        //     {
-        //         AddComponent(go);
-        //     }
-        // }
+        [HarmonyPatch(typeof(FishFeederConfig))]
+        [HarmonyPatch(nameof(FishFeederConfig.ConfigureBuildingTemplate))]
+        public static class FishFeederConfig_ConfigureBuildingTemplate_Patch
+        {
+            private static void Postfix(GameObject go)
+            {
+                AddComponent(go);
+            }
+        }
 
         [HarmonyPatch(typeof(CreatureFeederConfig))]
         [HarmonyPatch(nameof(CreatureFeederConfig.ConfigureBuildingTemplate))]
