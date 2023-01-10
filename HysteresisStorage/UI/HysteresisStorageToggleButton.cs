@@ -41,7 +41,6 @@ namespace HysteresisStorage
         protected override void OnSpawn()
         {
             base.OnSpawn();
-            // IsEnabled = toggleEnabled;
         }
 
         protected override void OnCleanUp()
@@ -69,8 +68,8 @@ namespace HysteresisStorage
             bool isEnabled = IsEnabled;
             KIconButtonMenu.ButtonInfo buttonInfo = null;
             buttonInfo = !isEnabled
-            ? new KIconButtonMenu.ButtonInfo("", HysteresisStorage.UI.STRINGS.USERMENUACTIONS.NAME_OFF, OnMenuToggle, Action.NumActions, null, null, null, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.TOOLTIP_OFF)
-            : new KIconButtonMenu.ButtonInfo("action_building_disabled", HysteresisStorage.UI.STRINGS.USERMENUACTIONS.NAME, OnMenuToggle, Action.NumActions, null, null, null, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.TOOLTIP);
+            ? new KIconButtonMenu.ButtonInfo(HysteresisStoragePatches.ENABLE_ICON_NAME, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.NAME_OFF, OnMenuToggle, Action.NumActions, null, null, null, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.TOOLTIP_OFF)
+            : new KIconButtonMenu.ButtonInfo(HysteresisStoragePatches.DISABLE_ICON_NAME, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.NAME, OnMenuToggle, Action.NumActions, null, null, null, HysteresisStorage.UI.STRINGS.USERMENUACTIONS.TOOLTIP);
             Game.Instance.userMenu.AddButton(base.gameObject, buttonInfo);
         }
 

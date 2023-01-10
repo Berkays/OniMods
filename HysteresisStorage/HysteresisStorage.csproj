@@ -57,6 +57,10 @@
       <HintPath>..\lib\Unity.TextMeshPro.dll</HintPath>
       <Private>false</Private>
     </Reference>
+    <Reference Include="PLib">
+      <HintPath>..\packages\PLib.4.8.1\lib\net471\PLib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HysteresisStorageMod.cs" />
@@ -77,5 +81,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="images/action_disable_hysteresis.png" />
+    <EmbeddedResource Include="images/action_enable_hysteresis.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>eval "export MSBuildProjectDirectory=$(MSBuildProjectDirectory);export TargetName=$(TargetName);$(MSBuildProjectDirectory)\..\PostBuild.sh"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

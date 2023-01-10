@@ -1,5 +1,6 @@
 using HarmonyLib;
 using KMod;
+using PeterHan.PLib.Core;
 
 namespace HysteresisStorage
 {
@@ -8,6 +9,7 @@ namespace HysteresisStorage
         public override void OnLoad(Harmony harmony)
         {
             base.OnLoad(harmony);
+            PUtil.InitLibrary(false);
             LocString.CreateLocStringKeys(typeof(HysteresisStorage.UI.STRINGS));
         }
     }

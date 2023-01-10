@@ -1,7 +1,9 @@
-using HarmonyLib;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Linq;
 using UnityEngine;
+using HarmonyLib;
+using PeterHan.PLib.UI;
 
 using HysteresisStorage.UI;
 
@@ -9,6 +11,9 @@ namespace HysteresisStorage
 {
     public class HysteresisStoragePatches
     {
+        internal const string ENABLE_ICON_NAME = "action_enable_hysteresis";
+        internal const string DISABLE_ICON_NAME = "action_disable_hysteresis";
+
         [HarmonyPatch(typeof(DetailsScreen))]
         [HarmonyPatch("OnPrefabInit")]
         public static class DetailsScreen_OnPrefabInit_Patch
@@ -155,6 +160,31 @@ namespace HysteresisStorage
                 }
 
                 return false;
+            }
+        }
+
+        internal static void LoadSprites()
+        {
+            Sprite enableSprite = PUIUtils.LoadSprite("HysteresisStorage.images.action_enable_hysteresis.png");
+            enableSprite.name = HysteresisStoragePatches.ENABLE_ICON_NAME;
+            Sprite disableSprite = PUIUtils.LoadSprite("HysteresisStorage.images.action_disable_hysteresis.png");
+            disableSprite.name = HysteresisStoragePatches.DISABLE_ICON_NAME;
+
+            Assets.Sprites.Add(HysteresisStoragePatches.ENABLE_ICON_NAME, enableSprite);
+            Assets.Sprites.Add(HysteresisStoragePatches.DISABLE_ICON_NAME, disableSprite);
+        }
+
+        [HarmonyPatch(typeof(UserMenuScreen), "OnPrefabInit")]
+        public static class UserMenuScreen_OnPrefabInit_Patch
+        {
+            internal static void Postfix(ref Sprite[] ___icons)
+            {
+                if (Assets.GetSprite(ENABLE_ICON_NAME) == null)
+                    LoadSprites();
+                ___icons = ___icons.Concat(new Sprite[] {
+                    Assets.GetSprite(ENABLE_ICON_NAME),
+                    Assets.GetSprite(DISABLE_ICON_NAME)
+                }).ToArray();
             }
         }
     }
