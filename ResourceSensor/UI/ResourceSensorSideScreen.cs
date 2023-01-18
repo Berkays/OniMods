@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace ResourceSensor
@@ -15,11 +16,16 @@ namespace ResourceSensor
 
         public KToggle countGlobalToggle;
 
+        private GameObject countStorageContainer;
+        public KToggle countStorageToggle;
+
         public KImage distanceCheckmark;
 
         public KImage roomCheckmark;
 
         public KImage globalCheckmark;
+
+        public KImage countStorageCheckmark;
 
         protected override void OnPrefabInit()
         {
@@ -45,6 +51,11 @@ namespace ResourceSensor
             eggGroup.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Room Mode");
             countRoomToggle = eggGroup.transform.Find("EggsCheckBox").GetComponent<KToggle>();
             roomCheckmark = countRoomToggle.transform.Find("CheckMark").GetComponent<KImage>();
+
+            countStorageContainer = GameObject.Instantiate(critterGroup, critterGroup.transform.parent);
+            countStorageContainer.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Include Storage Buildings");
+            countStorageToggle = countStorageContainer.transform.Find("CrittersCheckBox").GetComponent<KToggle>();
+            countStorageCheckmark = countStorageToggle.transform.Find("CheckMark").GetComponent<KImage>();
 
             var tempSliderScreen = ResourceSensorPatches.tempSliderSideScreen;
 
@@ -75,6 +86,7 @@ namespace ResourceSensor
             countDistanceToggle.onClick += ToggleDistance;
             countRoomToggle.onClick += ToggleRoom;
             countGlobalToggle.onClick += ToggleGlobal;
+            countStorageToggle.onClick += ToggleCountStorage;
 
             distanceSlider.SetTooltipText(string.Format(ResourceSensor.UI.UISIDESCREENS.RESOURCE_SENSOR_SIDE_SCREEN.SLIDER_TOOLTIP, 0));
             distanceSlider.onDrag += updateDistance;
@@ -108,18 +120,32 @@ namespace ResourceSensor
             distanceSlider.value = targetSensor.Distance;
             distanceText.SetText($"Distance: {targetSensor.Distance}");
             distanceSlider.SetTooltipText(string.Format(ResourceSensor.UI.UISIDESCREENS.RESOURCE_SENSOR_SIDE_SCREEN.SLIDER_TOOLTIP, distanceSlider.value));
-            distanceCheckmark.enabled = targetSensor.Mode == LogicResourceSensor.SensorMode.Distance;
-            roomCheckmark.enabled = targetSensor.Mode == LogicResourceSensor.SensorMode.Room;
-            globalCheckmark.enabled = targetSensor.Mode == LogicResourceSensor.SensorMode.Global;
+            countStorageCheckmark.enabled = targetSensor.IncludeStorage;
 
-            if (targetSensor.Mode == LogicResourceSensor.SensorMode.Distance)
+            switch (targetSensor.Mode)
             {
-                distanceSliderContainer.SetActive(true);
-                return;
+                case LogicResourceSensor.SensorMode.Distance:
+                    distanceCheckmark.enabled = true;
+                    roomCheckmark.enabled = false;
+                    globalCheckmark.enabled = false;
+                    distanceSliderContainer.SetActive(true);
+                    countStorageContainer.SetActive(true);
+                    break;
+                case LogicResourceSensor.SensorMode.Room:
+                    distanceCheckmark.enabled = false;
+                    roomCheckmark.enabled = true;
+                    globalCheckmark.enabled = false;
+                    countStorageContainer.SetActive(true);
+                    distanceSliderContainer.SetActive(false);
+                    break;
+                case LogicResourceSensor.SensorMode.Global:
+                    distanceCheckmark.enabled = false;
+                    roomCheckmark.enabled = false;
+                    globalCheckmark.enabled = true;
+                    countStorageContainer.SetActive(false);
+                    distanceSliderContainer.SetActive(false);
+                    break;
             }
-
-            distanceSliderContainer.SetActive(false);
-
         }
 
         private void ToggleDistance()
@@ -129,6 +155,7 @@ namespace ResourceSensor
             roomCheckmark.enabled = false;
             globalCheckmark.enabled = false;
 
+            countStorageContainer.SetActive(true);
             distanceSliderContainer.SetActive(true);
         }
         private void ToggleRoom()
@@ -138,6 +165,7 @@ namespace ResourceSensor
             roomCheckmark.enabled = true;
             globalCheckmark.enabled = false;
 
+            countStorageContainer.SetActive(true);
             distanceSliderContainer.SetActive(false);
         }
         private void ToggleGlobal()
@@ -147,7 +175,14 @@ namespace ResourceSensor
             roomCheckmark.enabled = false;
             globalCheckmark.enabled = true;
 
+            countStorageContainer.SetActive(false);
             distanceSliderContainer.SetActive(false);
+        }
+
+        private void ToggleCountStorage()
+        {
+            targetSensor.IncludeStorage = !targetSensor.IncludeStorage;
+            countStorageCheckmark.enabled = targetSensor.IncludeStorage;
         }
 
         private void updateDistance()

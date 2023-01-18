@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using KSerialization;
 using UnityEngine;
 
@@ -58,6 +59,23 @@ namespace ResourceSensor
             }
         }
 
+        [Serialize]
+        private bool includeStorage = false;
+
+        public bool IncludeStorage
+        {
+            get
+            {
+                return this.includeStorage;
+            }
+            set
+            {
+                this.includeStorage = value;
+            }
+        }
+
+#pragma warning disable CS0649
+#pragma warning disable CS0169
         [MyCmpGet]
         private DistanceVisualizer visualizer;
         private bool visualiserDirty = false;
@@ -84,6 +102,8 @@ namespace ResourceSensor
 
         [MyCmpAdd]
         private CopyBuildingSettings copyBuildingSettings;
+#pragma warning restore CS0649
+#pragma warning restore CS0169
 
         private static readonly EventSystem.IntraObjectHandler<LogicResourceSensor> OnCopySettingsDelegate = new EventSystem.IntraObjectHandler<LogicResourceSensor>(delegate (LogicResourceSensor component, object data)
         {
@@ -149,6 +169,7 @@ namespace ResourceSensor
                 countThreshold = component.countThreshold;
                 activateOnGreaterThan = component.activateOnGreaterThan;
                 Mode = component.Mode;
+                IncludeStorage = component.IncludeStorage;
             }
         }
 
@@ -308,6 +329,8 @@ namespace ResourceSensor
                 return CountCell(cell);
             }
 
+            HashSet<GameObject> countedBuildings = new HashSet<GameObject>();
+
             Grid.CellToXY(cell, out int cellX, out int cellY);
 
             int minX = cellX - this.Distance;
@@ -327,6 +350,17 @@ namespace ResourceSensor
 
                     this.visualizer.visCells.Add(searchCell);
                     totalMass += CountCell(searchCell);
+
+                    if (this.includeStorage)
+                    {
+                        GameObject obj = Grid.Objects[searchCell, (int)ObjectLayer.Building];
+
+                        if (obj == null || countedBuildings.Contains(obj))
+                            continue;
+
+                        countedBuildings.Add(obj);
+                        totalMass += CountBuilding(obj);
+                    }
                 }
             }
 
@@ -345,6 +379,8 @@ namespace ResourceSensor
             int minY = room.cavity.minY;
             int maxY = room.cavity.maxY;
 
+            HashSet<GameObject> countedBuildings = new HashSet<GameObject>();
+
             RoomProber roomProber = Game.Instance.roomProber;
             for (int x = minX; x <= maxX; x++)
             {
@@ -352,11 +388,21 @@ namespace ResourceSensor
                 {
                     int cell = Grid.XYToCell(x, y);
 
-                    if (Grid.IsSolidCell(cell))
+                    if (Grid.IsSolidCell(cell) || roomProber.GetCavityForCell(cell) != room.cavity)
                         continue;
 
-                    if (roomProber.GetCavityForCell(cell) == room.cavity)
-                        totalMass += CountCell(cell);
+                    totalMass += CountCell(cell);
+
+                    if (this.includeStorage)
+                    {
+                        GameObject obj = Grid.Objects[cell, (int)ObjectLayer.Building];
+
+                        if (obj == null || countedBuildings.Contains(obj))
+                            continue;
+
+                        countedBuildings.Add(obj);
+                        totalMass += CountBuilding(obj);
+                    }
                 }
             }
 
@@ -398,9 +444,39 @@ namespace ResourceSensor
                     foreach (var tag in tags)
                     {
                         if (kPrefabID.HasTag(tag))
-                        {
                             totalMass += obj2.GetComponent<PrimaryElement>().Mass;
-                            continue;
+                    }
+                }
+            }
+
+            return (int)totalMass;
+        }
+
+        private int CountBuilding(GameObject obj)
+        {
+            if (obj.TryGetComponent(out BuildingUnderConstruction _))
+                return 0;
+
+            if (!obj.TryGetComponent(out StorageLocker _)
+            && !obj.TryGetComponent(out StorageLockerSmart _)
+            && !obj.TryGetComponent(out RationBox _)
+            && !obj.TryGetComponent(out Refrigerator _))
+                return 0;
+
+            float totalMass = 0f;
+
+            if (obj.TryGetComponent<Storage>(out Storage storage))
+            {
+                var tags = treeFilterable.AcceptedTags;
+
+                foreach (var item in storage.items)
+                {
+                    foreach (var tag in tags)
+                    {
+                        if (item.HasTag(tag))
+                        {
+                            totalMass += item.GetComponent<PrimaryElement>().Mass;
+                            break;
                         }
                     }
                 }
