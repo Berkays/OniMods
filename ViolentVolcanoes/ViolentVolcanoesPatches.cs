@@ -89,7 +89,7 @@ namespace ViolentVolcanoes
                     comet.massRange = new Vector2(eruptionRate * 0.2f, eruptionRate * 0.3f);
                     comet.temperatureRange = new Vector2(volcanoTemp - TEMPERATURE_RANGE, volcanoTemp + TEMPERATURE_RANGE);
                     comet.ignoreObstacleForDamage.Set(smi.master.gameObject.GetComponent<KPrefabID>());
-                    if (!ViolentVolcanoesMod.Config.CreateDiamondTiles)
+                    if (!ViolentVolcanoesMod.Config.CreateNaturalTiles)
                         comet.addTiles = 0;
 
                     PrimaryElement primaryElement = comet.gameObject.AddOrGet<PrimaryElement>();

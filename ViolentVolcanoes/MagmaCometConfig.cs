@@ -34,7 +34,7 @@ namespace ViolentVolcanoes
             comet.spawnVelocity = new Vector2(5f, 8f);
 
             PrimaryElement primaryElement = gameObject.AddOrGet<PrimaryElement>();
-            primaryElement.SetElement(SimHashes.Diamond);
+            primaryElement.SetElement(ViolentVolcanoesMod.Config.TileMaterial);
             primaryElement.Temperature = (comet.temperatureRange.x + comet.temperatureRange.y) / 2f;
             KBatchedAnimController kBatchedAnimController = gameObject.AddOrGet<KBatchedAnimController>();
             kBatchedAnimController.AnimFiles = new KAnimFile[1] { Assets.GetAnim("meteor_rock_kanim") };

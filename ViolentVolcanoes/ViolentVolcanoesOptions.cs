@@ -7,13 +7,19 @@ namespace ViolentVolcanoes
     [RestartRequired]
     public class ModOptions
     {
-        [Option("Emit diamond tiles", "Natural diamond tiles will be created on meteor impact")]
+        [Option("Emit natural tiles", "Natural tiles will be created on meteor impact")]
         [JsonProperty]
-        public bool CreateDiamondTiles { get; set; }
+        public bool CreateNaturalTiles { get; set; }
+
+        [Option("Natural tile elemenet")]
+        [JsonProperty]
+        public SimHashes TileMaterial { get; set; }
 
         public ModOptions()
         {
-            CreateDiamondTiles = true;
+            CreateNaturalTiles = true;
+            TileMaterial = SimHashes.Diamond;
         }
+
     }
 }
