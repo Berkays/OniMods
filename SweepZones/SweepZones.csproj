@@ -8,11 +8,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>SweepZones</RootNamespace>
     <AssemblyName>SweepZones</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
-    <ProduceOnlyReferenceAssembly>true</ProduceOnlyReferenceAssembly>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <Optimize>false</Optimize>
@@ -51,9 +49,9 @@
       <HintPath>..\lib\UnityEngine.CoreModule.dll</HintPath>
       <Private>false</Private>
     </Reference>
-    <Reference Include="PLib, Version=4.8.1.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="PLib">
       <HintPath>..\packages\PLib.4.8.1\lib\net471\PLib.dll</HintPath>
-      <Private>True</Private>
+      <Private>false</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
