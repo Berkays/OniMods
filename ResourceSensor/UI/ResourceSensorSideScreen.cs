@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace ResourceSensor
 {
@@ -27,6 +28,9 @@ namespace ResourceSensor
 
         public KImage countStorageCheckmark;
 
+        private GameObject dividerMargin;
+        private GameObject divider;
+
         protected override void OnPrefabInit()
         {
             base.OnPrefabInit();
@@ -36,31 +40,71 @@ namespace ResourceSensor
 
         private void SetElements()
         {
-            GameObject critterGroup = transform.Find("Contents/CheckboxGroup").gameObject;
+            GameObject distanceContainer = transform.Find("Contents/CheckboxGroup").gameObject;
 
-            GameObject globalCheckbox = GameObject.Instantiate(critterGroup, critterGroup.transform.parent);
-            globalCheckbox.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Global Mode");
-            countGlobalToggle = globalCheckbox.transform.Find("CrittersCheckBox").GetComponent<KToggle>();
+            // Global UI
+            GameObject globalContainer = GameObject.Instantiate(distanceContainer, distanceContainer.transform.parent);
+            Transform checkBoxGroup = globalContainer.transform.Find("CrittersCheckBox");
+            checkBoxGroup.name = "CountGlobalCheckBox";
+
+            globalContainer.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Global Mode");
+            countGlobalToggle = checkBoxGroup.GetComponent<KToggle>();
             globalCheckmark = countGlobalToggle.transform.Find("CheckMark").GetComponent<KImage>();
 
-            critterGroup.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Distance Mode");
-            countDistanceToggle = critterGroup.transform.Find("CrittersCheckBox").GetComponent<KToggle>();
+            // Distance UI
+            checkBoxGroup = distanceContainer.transform.Find("CrittersCheckBox");
+            checkBoxGroup.name = "CountDistanceCheckBox";
+
+            distanceContainer.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Distance Mode");
+            countDistanceToggle = checkBoxGroup.GetComponent<KToggle>();
             distanceCheckmark = countDistanceToggle.transform.Find("CheckMark").GetComponent<KImage>();
 
-            GameObject eggGroup = transform.Find("Contents/CheckboxGroup/EggsCheckBox").parent.gameObject;
-            eggGroup.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Room Mode");
-            countRoomToggle = eggGroup.transform.Find("EggsCheckBox").GetComponent<KToggle>();
+            // Room UI
+            GameObject roomContainer = transform.Find("Contents/CheckboxGroup/EggsCheckBox").parent.gameObject;
+            checkBoxGroup = roomContainer.transform.Find("EggsCheckBox");
+            checkBoxGroup.name = "CountRoomCheckBox";
+
+            roomContainer.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Room Mode");
+            countRoomToggle = checkBoxGroup.GetComponent<KToggle>();
             roomCheckmark = countRoomToggle.transform.Find("CheckMark").GetComponent<KImage>();
 
-            countStorageContainer = GameObject.Instantiate(critterGroup, critterGroup.transform.parent);
+            // Include Storage UI
+            countStorageContainer = GameObject.Instantiate(distanceContainer, distanceContainer.transform.parent);
             countStorageContainer.transform.Find("Label").gameObject.GetComponent<LocText>().SetText("Include Storage Buildings");
-            countStorageToggle = countStorageContainer.transform.Find("CrittersCheckBox").GetComponent<KToggle>();
+            checkBoxGroup = countStorageContainer.transform.Find("CountDistanceCheckBox");
+            checkBoxGroup.name = "IncludeStorageCheckBox";
+            countStorageToggle = checkBoxGroup.GetComponent<KToggle>();
             countStorageCheckmark = countStorageToggle.transform.Find("CheckMark").GetComponent<KImage>();
+            countStorageContainer.GetComponent<RectTransform>().localScale = new Vector3(0.94f, 0.94f, 1f);
+
+            // Divider
+            dividerMargin = new GameObject("Margin");
+            dividerMargin.transform.SetParent(distanceContainer.transform.parent);
+            dividerMargin.transform.SetSiblingIndex(4);
+            dividerMargin.AddComponent<LayoutElement>();
+            dividerMargin.transform.localScale = new Vector3(1f, 1f, 1f);
+            dividerMargin.GetComponent<RectTransform>().sizeDelta = new Vector2(1f, 4f);
+
+            divider = new GameObject("Divider");
+            divider.transform.SetParent(distanceContainer.transform.parent);
+            divider.transform.SetSiblingIndex(5);
+            LayoutElement le = divider.AddComponent<LayoutElement>();
+            le.minWidth = 240f;
+            le.preferredWidth = 240f;
+            le.minHeight = 1f;
+            le.preferredHeight = 1f;
+            le.flexibleWidth = 1;
+            divider.transform.localScale = new Vector3(1f, 1f, 1f);
+            divider.transform.localPosition = new Vector3(-122, -55, 0);
+
+            divider.AddComponent<CanvasRenderer>();
+            Image i = divider.AddComponent<Image>();
+            i.color = new Color(0.7f, 0.7f, 0.7f);
 
             var tempSliderScreen = ResourceSensorPatches.tempSliderSideScreen;
 
             GameObject original = tempSliderScreen.transform.Find("ValidContent").gameObject;
-            distanceSliderContainer = GameObject.Instantiate(original, critterGroup.transform.parent);
+            distanceSliderContainer = GameObject.Instantiate(original, distanceContainer.transform.parent);
             distanceSliderContainer.name = "DistanceSlider";
             distanceSliderContainer.transform.SetSiblingIndex(2);
 
@@ -130,6 +174,8 @@ namespace ResourceSensor
                     globalCheckmark.enabled = false;
                     distanceSliderContainer.SetActive(true);
                     countStorageContainer.SetActive(true);
+                    dividerMargin.SetActive(true);
+                    divider.SetActive(true);
                     break;
                 case LogicResourceSensor.SensorMode.Room:
                     distanceCheckmark.enabled = false;
@@ -137,6 +183,8 @@ namespace ResourceSensor
                     globalCheckmark.enabled = false;
                     countStorageContainer.SetActive(true);
                     distanceSliderContainer.SetActive(false);
+                    dividerMargin.SetActive(true);
+                    divider.SetActive(true);
                     break;
                 case LogicResourceSensor.SensorMode.Global:
                     distanceCheckmark.enabled = false;
@@ -144,6 +192,8 @@ namespace ResourceSensor
                     globalCheckmark.enabled = true;
                     countStorageContainer.SetActive(false);
                     distanceSliderContainer.SetActive(false);
+                    dividerMargin.SetActive(false);
+                    divider.SetActive(false);
                     break;
             }
         }
@@ -157,6 +207,8 @@ namespace ResourceSensor
 
             countStorageContainer.SetActive(true);
             distanceSliderContainer.SetActive(true);
+            dividerMargin.SetActive(true);
+            divider.SetActive(true);
         }
         private void ToggleRoom()
         {
@@ -167,6 +219,8 @@ namespace ResourceSensor
 
             countStorageContainer.SetActive(true);
             distanceSliderContainer.SetActive(false);
+            dividerMargin.SetActive(true);
+            divider.SetActive(true);
         }
         private void ToggleGlobal()
         {
@@ -177,6 +231,8 @@ namespace ResourceSensor
 
             countStorageContainer.SetActive(false);
             distanceSliderContainer.SetActive(false);
+            dividerMargin.SetActive(false);
+            divider.SetActive(false);
         }
 
         private void ToggleCountStorage()
