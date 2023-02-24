@@ -5,12 +5,16 @@ using HarmonyLib;
 using UnityEngine;
 using PeterHan.PLib.PatchManager;
 using PeterHan.PLib.Core;
+using PeterHan.PLib.Actions;
 using KMod;
 
 namespace SweepZones
 {
     public class SweepZonePatches : KMod.UserMod2
     {
+        internal static PAction SweepToolAction { get; private set; }
+        internal static PAction SweepOverlayAction { get; private set; }
+
         [PLibMethod(RunAt.BeforeDbInit)]
         internal static void BeforeDbInit()
         {
@@ -26,6 +30,11 @@ namespace SweepZones
             base.OnLoad(harmony);
             PUtil.InitLibrary();
             new PPatchManager(harmony).RegisterPatchClass(typeof(SweepZonePatches));
+
+            SweepToolAction = new PActionManager().CreateAction(SweepZones.Actions.TOOL_ACTION_KEY,
+                SweepZones.Actions.TOOL_ACTION_TITLE, new PKeyBinding(KKeyCode.None));
+            SweepOverlayAction = new PActionManager().CreateAction(SweepZones.Actions.OVERLAY_ACTION_KEY,
+                SweepZones.Actions.OVERLAY_ACTION_TITLE, new PKeyBinding(KKeyCode.None));
         }
 
         public override void OnAllModsLoaded(Harmony harmony, IReadOnlyList<Mod> mods)
@@ -88,7 +97,7 @@ namespace SweepZones
                 __instance.basicTools.Add(ToolMenu.CreateToolCollection(
                     SweepZones.UI.STRINGS.TOOL_TITLE,
                     SweepZones.UI.STRINGS.TOOL_ICON,
-                    Action.Overlay10,
+                    SweepToolAction.GetKAction(),
                     nameof(SweepZones.SweepZoneTool),
                     SweepZones.UI.STRINGS.TOOL_DESCRIPTION,
                     false
@@ -142,7 +151,7 @@ namespace SweepZones
                         SweepZones.UI.STRINGS.OVERLAY_ICON,
                         SweepZoneOverlay.ID,
                         "",
-                        Action.NumActions,
+                        SweepOverlayAction.GetKAction(),
                         "",
                         SweepZones.UI.STRINGS.OVERLAY_NAME.Value
                     }

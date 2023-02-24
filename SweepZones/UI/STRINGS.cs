@@ -23,4 +23,12 @@ namespace SweepZones
             public static readonly KeyValuePair<string, string> OVERLAY_STATE_MOP = new KeyValuePair<string, string>("SweepZones.Overlay.STATE_MOP", "Mop Zones");
         }
     }
+
+    public class Actions
+    {
+        public static string OVERLAY_ACTION_KEY = "SweepZones.Action.Overlay";
+        public static LocString OVERLAY_ACTION_TITLE = "Sweep Zones Overlay";
+        public static string TOOL_ACTION_KEY = "SweepZones.Action.Tool";
+        public static LocString TOOL_ACTION_TITLE = "Sweep Zones Tool";
+    }
 }
