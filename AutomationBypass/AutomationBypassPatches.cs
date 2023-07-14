@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using HarmonyLib;
 using PeterHan.PLib.Core;
 using Database;
+using System.Collections;
 
 namespace AutomationBypass
 {
@@ -82,7 +83,11 @@ namespace AutomationBypass
         [HarmonyPatch("UpdateUI")]
         static class OverlayModes_UpdateUI_Patch
         {
+            private delegate List<object> CachedDelegate(KCompactedVector<object> instance);
+
             static readonly Type uiInfoType = PPatchTools.GetTypeSafe("OverlayModes+Logic+UIInfo");
+            static FieldInfo uiInfoVectorDataField = null;
+
             static readonly FieldInfo bitDepthField = uiInfoType.GetField("bitDepth", BindingFlags.Instance | BindingFlags.Public);
             static readonly FieldInfo imageField = uiInfoType.GetField("image", BindingFlags.Instance | BindingFlags.Public);
             static readonly FieldInfo cellField = uiInfoType.GetField("cell", BindingFlags.Instance | BindingFlags.Public);
@@ -91,9 +96,12 @@ namespace AutomationBypass
             static readonly Color32 logicOn = new Color32(GlobalAssets.Instance.colorSet.logicOn.r, GlobalAssets.Instance.colorSet.logicOn.g, GlobalAssets.Instance.colorSet.logicOn.b, byte.MaxValue);
             static readonly Color32 logicOff = new Color32(GlobalAssets.Instance.colorSet.logicOff.r, GlobalAssets.Instance.colorSet.logicOff.g, GlobalAssets.Instance.colorSet.logicOff.b, byte.MaxValue);
 
-            internal static void Postfix(KCompactedVector<object> ___uiInfo)
+            internal static void Postfix(object ___uiInfo)
             {
-                foreach (object data in ___uiInfo)
+                if (uiInfoVectorDataField == null)
+                    uiInfoVectorDataField = ___uiInfo.GetType().GetField("data", BindingFlags.Instance | BindingFlags.NonPublic);
+
+                foreach (object data in (IEnumerable)uiInfoVectorDataField.GetValue(___uiInfo))
                 {
                     if (data == null)
                         continue;
