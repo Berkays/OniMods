@@ -93,6 +93,16 @@ namespace HysteresisStorage
             }
         }
 
+        [HarmonyPatch(typeof(SolidConduitInboxConfig))]
+        [HarmonyPatch(nameof(SolidConduitInboxConfig.DoPostConfigureComplete))]
+        public static class SolidConduitInboxConfig_DoPostConfigureComplete_Patch
+        {
+            private static void Postfix(GameObject go)
+            {
+                AddComponent(go);
+            }
+        }
+
         [HarmonyPatch(typeof(FilteredStorage))]
         [HarmonyPatch("OnFilterChanged")]
         public class FilteredStorage_OnFilterChanged_Patch

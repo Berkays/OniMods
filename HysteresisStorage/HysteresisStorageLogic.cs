@@ -131,6 +131,8 @@ namespace HysteresisStorage
                 type = this.storage.GetComponent<StorageLockerSmart>()?.GetType(); // Has none/ Base has storagelocker
             if (type == null)
                 type = this.storage.GetComponent<CreatureFeeder>()?.GetType(); // Has none/ Base has storagelocker
+            if (type == null)
+                type = this.storage.GetComponent<SolidConduitInbox>()?.GetType(); // Has FilteredStorage
 
             return this.storage.GetComponent(type);
         }
@@ -148,7 +150,7 @@ namespace HysteresisStorage
 
         public void ForceCapacityChangeRefresh()
         {
-            if (userControlledCapacity.UserMaxCapacity != this.lastMaxCapacity)
+            if (userControlledCapacity != null && userControlledCapacity.UserMaxCapacity != this.lastMaxCapacity)
             {
                 // Reset hysteresis state
                 this.onceFull = false;

@@ -32,8 +32,15 @@ namespace HysteresisStorage.UI
             base.OnSpawn();
 
             inputLabel.text = "Min:";
-            unitsLabel.text = target.CapacityUnits;
-            slider.SetTooltipText(string.Format(HysteresisStorage.UI.STRINGS.HYSTERESISSTORAGESIDESCREEN.SLIDER_TOOLTIP, 0, target.CapacityUnits));
+
+            LocString capacityUnits;
+            if (target == null)
+                capacityUnits = GameUtil.GetCurrentMassUnit();
+            else
+                capacityUnits = target.CapacityUnits;
+
+            unitsLabel.text = capacityUnits;
+            slider.SetTooltipText(string.Format(HysteresisStorage.UI.STRINGS.HYSTERESISSTORAGESIDESCREEN.SLIDER_TOOLTIP, 0, capacityUnits));
             slider.onDrag += delegate
             {
                 ReceiveValueFromSlider(slider.value);
@@ -79,14 +86,28 @@ namespace HysteresisStorage.UI
 
             target = new_target.GetComponent<IUserControlledCapacity>();
 
-            var maxValue = Mathf.Max(0, target.UserMaxCapacity - 1);
+            float maxValue = 0;
+            LocString capacityUnits;
+
+            if (target == null) // Workaround for converyor loader
+            {
+                var fs = new_target.GetComponent<Storage>();
+                maxValue = fs.capacityKg;
+                capacityUnits = GameUtil.GetCurrentMassUnit();
+            }
+            else
+            {
+                maxValue = Mathf.Max(0, target.UserMaxCapacity - 1);
+                capacityUnits = target.CapacityUnits;
+            }
+
             var value = Mathf.Min(maxValue, targetLogicComponent.MinUserStorage);
             slider.minValue = 0;
             slider.maxValue = maxValue;
             slider.value = value;
-            slider.SetTooltipText(string.Format(HysteresisStorage.UI.STRINGS.HYSTERESISSTORAGESIDESCREEN.SLIDER_TOOLTIP, slider.value, target.CapacityUnits));
+            slider.SetTooltipText(string.Format(HysteresisStorage.UI.STRINGS.HYSTERESISSTORAGESIDESCREEN.SLIDER_TOOLTIP, slider.value, capacityUnits));
 
-            unitsLabel.text = target.CapacityUnits;
+            unitsLabel.text = capacityUnits;
             numberInput.minValue = 0;
             numberInput.maxValue = slider.maxValue;
             numberInput.currentValue = slider.value;
@@ -131,8 +152,15 @@ namespace HysteresisStorage.UI
 
         private void UpdateHysteresisThreshold(float newValue)
         {
+            LocString capacityUnits;
+            if (target == null)
+                capacityUnits = GameUtil.GetCurrentMassUnit();
+            else
+                capacityUnits = target.CapacityUnits;
+
+
             slider.value = newValue;
-            slider.SetTooltipText(string.Format(HysteresisStorage.UI.STRINGS.HYSTERESISSTORAGESIDESCREEN.SLIDER_TOOLTIP, slider.value, target.CapacityUnits));
+            slider.SetTooltipText(string.Format(HysteresisStorage.UI.STRINGS.HYSTERESISSTORAGESIDESCREEN.SLIDER_TOOLTIP, slider.value, capacityUnits));
 
             numberInput.currentValue = newValue;
             numberInput.SetDisplayValue(slider.value.ToString());
