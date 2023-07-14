@@ -58,7 +58,7 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="PLib">
-      <HintPath>..\packages\PLib.4.8.1\lib\net471\PLib.dll</HintPath>
+      <HintPath>..\packages\PLib.4.13.0\lib\net471\PLib.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
@@ -66,6 +66,7 @@
     <Compile Include="HysteresisStorageMod.cs" />
     <Compile Include="HysteresisStoragePatches.cs" />
     <Compile Include="HysteresisStorageLogic.cs" />
+    <Compile Include="ModIntegrations.cs" />
     <Compile Include="IEventDispose.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\HysteresisStorageSideScreen.cs" />
