@@ -3,9 +3,12 @@
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/workspace",
-    "settings": {},
-    "extensions": [
-        "eamodio.gitlens",
-        "ms-dotnettools.csharp"
-    ]
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "eamodio.gitlens",
+                "ms-dotnettools.csharp"
+            ]
+        }
+    }
 }
