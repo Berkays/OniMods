@@ -33,9 +33,10 @@ namespace ViolentVolcanoes
                     }
                 }
 
-                var instructionsToInsert = new List<CodeInstruction>();
-
-                instructionsToInsert.Add(new CodeInstruction(OpCodes.Ret));
+                var instructionsToInsert = new List<CodeInstruction>
+                {
+                    new CodeInstruction(OpCodes.Ret)
+                };
 
                 if (insertionIndex != -1)
                 {
@@ -49,7 +50,7 @@ namespace ViolentVolcanoes
             {
                 var emitterField = typeof(Geyser).GetField("emitter", BindingFlags.Instance | BindingFlags.NonPublic);
 
-                __instance.erupt.DefaultState(__instance.erupt.erupting)
+                __instance.erupt.TriggerOnEnter(GameHashes.GeyserEruption, (Geyser.StatesInstance smi) => true).TriggerOnExit(GameHashes.GeyserEruption, (Geyser.StatesInstance smi) => false).DefaultState(__instance.erupt.erupting)
                 .ScheduleGoTo((Geyser.StatesInstance smi) => smi.master.RemainingEruptTime(), __instance.post_erupt)
                 .Enter(delegate (Geyser.StatesInstance smi)
                 {
@@ -60,8 +61,10 @@ namespace ViolentVolcanoes
                 {
                     if (smi.master.configuration.typeId == GeyserGenericConfig.SmallVolcano || smi.master.configuration.typeId == GeyserGenericConfig.BigVolcano && smi.GetComponent<ElementEmitter>().isEmitterBlocked == false)
                     {
+                        ElementEmitter emitter = (ElementEmitter)emitterField.GetValue(smi.master);
                         // Start violence
-                        Burst(smi);
+                        if (!emitter.isEmitterBlocked)
+                            Burst(smi);
                     }
                 }, UpdateRate.SIM_1000ms)
                 .Exit(delegate (Geyser.StatesInstance smi)
