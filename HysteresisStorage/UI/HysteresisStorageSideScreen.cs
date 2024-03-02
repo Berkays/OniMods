@@ -14,6 +14,10 @@ namespace HysteresisStorage.UI
 
         public event System.Action<float> OnValueChangedEvent = delegate { };
 
+        public override int GetSideScreenSortOrder()
+        {
+            return -20;
+        }
         private void SetElements()
         {
             this.inputLabel = transform.Find("ValidContent/Max/Label").GetComponent<LocText>();
