@@ -14,7 +14,11 @@ namespace HysteresisStorage
         [Serialize]
         private float minUserStorage = 0;
 
+        [Serialize]
         private float lastMaxCapacity = -1;
+
+        [Serialize]
+        private int currentTagCount = 0;
 
         public float MinUserStorage
         {
@@ -148,15 +152,19 @@ namespace HysteresisStorage
                 this.filteredStorage.FilterChanged();
         }
 
-        public void ForceCapacityChangeRefresh()
+        public void ForceCapacityChangeRefresh(int tagCount)
         {
-            if (userControlledCapacity != null && userControlledCapacity.UserMaxCapacity != this.lastMaxCapacity)
+            if (userControlledCapacity != null)
+            {
+                if (tagCount != currentTagCount || userControlledCapacity.UserMaxCapacity != this.lastMaxCapacity)
             {
                 // Reset hysteresis state
                 this.onceFull = false;
+                    this.currentTagCount = tagCount;
 
                 this.lastMaxCapacity = userControlledCapacity.UserMaxCapacity;
                 OnCapacityChangedEvent?.Invoke(userControlledCapacity.UserMaxCapacity);
+                }
             }
         }
     }

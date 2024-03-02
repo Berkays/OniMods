@@ -136,7 +136,7 @@ namespace HysteresisStorage
                 if (hysteresisStorage == null)
                     return true;
 
-                hysteresisStorage.ForceCapacityChangeRefresh();
+                hysteresisStorage.ForceCapacityChangeRefresh(tags.Count);
 
                 // Operate normally
                 if (hysteresisStorage.HysteresisEnabled == false)
