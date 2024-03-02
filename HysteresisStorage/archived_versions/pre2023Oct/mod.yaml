@@ -1,3 +1,0 @@
-title: "Hysteresis Storage" 
-description: "Prevent duplicants from storing items below specified threshold."
-staticID: "Rubacava.HysteresisStorage"
