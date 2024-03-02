@@ -33,6 +33,14 @@ namespace HysteresisStorage
                     PPatchTools.GetTypeSafe(ModIntegrations.StoragePodConfiguration.CoolPodBuildingConfig).GetMethod(ModIntegrations.StoragePodConfiguration.CoolPodBuildingConfigMethod, BindingFlags.Public | BindingFlags.Instance),
                  postfix: patchMethod);
             }
+
+            if (ModIntegrations.SealedContainerConfiguration.Enabled)
+            {
+                var patchMethod = new HarmonyMethod(typeof(HysteresisStoragePatches.SealedContainer_DoPostConfigureComplete_Patch).GetMethod("Postfix", BindingFlags.Static | BindingFlags.Public));
+                harmony.Patch(
+                    PPatchTools.GetTypeSafe(ModIntegrations.SealedContainerConfiguration.SealedContainerBuildingConfig, ModIntegrations.SealedContainerConfiguration.NAMESPACE).GetMethod(ModIntegrations.SealedContainerConfiguration.SealedContainerBuildingConfigMethod, BindingFlags.Public | BindingFlags.Instance),
+                 postfix: patchMethod);
+            }
         }
 
     }

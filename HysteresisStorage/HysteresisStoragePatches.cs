@@ -111,6 +111,14 @@ namespace HysteresisStorage
             }
         }
 
+        public static class SealedContainer_DoPostConfigureComplete_Patch
+        {
+            public static void Postfix(GameObject go)
+            {
+                AddComponent(go);
+            }
+        }
+
         [HarmonyPatch(typeof(FilteredStorage))]
         [HarmonyPatch("OnFilterChanged")]
         public class FilteredStorage_OnFilterChanged_Patch
