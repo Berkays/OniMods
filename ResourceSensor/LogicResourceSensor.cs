@@ -170,6 +170,7 @@ namespace ResourceSensor
                 activateOnGreaterThan = component.activateOnGreaterThan;
                 Mode = component.Mode;
                 IncludeStorage = component.IncludeStorage;
+                Distance = component.Distance;
             }
         }
 
