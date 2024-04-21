@@ -38,7 +38,7 @@ namespace AutomationBypass
 
         private Guid statusGuid;
 
-        private delegate void OnLogicValueChangedDelegate(LogicPorts instance, HashedString port_id, int new_value);
+        private delegate void OnLogicValueChangedDelegate(LogicPorts instance, HashedString port_id, int new_value, int prev_value);
         private readonly OnLogicValueChangedDelegate onLogicValueChanged = (OnLogicValueChangedDelegate)typeof(LogicPorts).GetMethod("OnLogicValueChanged", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic).CreateDelegate(typeof(OnLogicValueChangedDelegate));
 
         protected override void OnPrefabInit()
@@ -80,18 +80,20 @@ namespace AutomationBypass
             var port = logicPorts.inputPortInfo[0];
             var portId = port.id;
 
+            LogicCircuitNetwork network = Game.Instance.logicCircuitManager.GetNetworkForCell(logicPorts.inputPorts[0].GetLogicUICell());
+            int prevLogicValue = network != null ? (network.IsBitActive(0) ? 1 : 0) : 1;
+            int newLogicValue = prevLogicValue == 0 ? 1 : 0;
+
             if (IsEnabled)
             {
-                onLogicValueChanged(logicPorts, portId, 1);
+                onLogicValueChanged(logicPorts, portId, 1, prevLogicValue);
                 statusGuid = selectable.AddStatusItem(AutomationBypassPatches.bypassStatusItem, this);
                 return;
             }
 
             statusGuid = selectable.RemoveStatusItem(AutomationBypassPatches.bypassStatusItem);
 
-            LogicCircuitNetwork network = Game.Instance.logicCircuitManager.GetNetworkForCell(logicPorts.inputPorts[0].GetLogicUICell());
-            int logicValue = network != null ? (network.IsBitActive(0) ? 1 : 0) : 1;
-            onLogicValueChanged(logicPorts, portId, logicValue);
+            onLogicValueChanged(logicPorts, portId, newLogicValue, prevLogicValue);
         }
 
         private void OnRefreshUserMenu(object data)
