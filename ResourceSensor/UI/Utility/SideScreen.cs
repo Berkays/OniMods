@@ -46,7 +46,7 @@ namespace FUtility.FUI
         {
             var detailsScreen = Traverse.Create(DetailsScreen.Instance);
             screens = detailsScreen.Field("sideScreens").GetValue<List<SideScreenRef>>();
-            contentBody = detailsScreen.Field("sideScreenContentBody").GetValue<GameObject>();
+            contentBody = detailsScreen.Field("sideScreenConfigContentBody").GetValue<GameObject>();
 
             return screens != null && contentBody != null;
         }
