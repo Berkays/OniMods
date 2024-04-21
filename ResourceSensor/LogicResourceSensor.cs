@@ -87,12 +87,12 @@ namespace ResourceSensor
         private LogicPorts logicPorts;
 
         [Serialize]
-        public int countThreshold;
+        public float countThreshold;
 
         [Serialize]
         public bool activateOnGreaterThan = true;
 
-        private int currentCount;
+        private float currentCount;
 
         private KSelectable selectable;
 
@@ -118,7 +118,7 @@ namespace ResourceSensor
             }
             set
             {
-                countThreshold = (int)value;
+                countThreshold = value;
             }
         }
 
@@ -304,12 +304,17 @@ namespace ResourceSensor
 
         public float ProcessedSliderValue(float input)
         {
-            return Mathf.Round(input);
+            return Mathf.RoundToInt(input);
         }
 
         public float ProcessedInputValue(float input)
         {
-            return Mathf.Round(input);
+            int rnd = Mathf.CeilToInt(input);
+            float actual = Mathf.Round(input * 100) / 100.0f;
+            if (Mathf.Abs(actual - rnd) <= 0.01f)
+                return rnd;
+
+            return actual;
         }
 
         public LocString ThresholdValueUnits()
@@ -317,7 +322,7 @@ namespace ResourceSensor
             return "";
         }
 
-        private int CountDistance()
+        private float CountDistance()
         {
             int cell = logicPorts.GetPortCell(LogicSwitch.PORT_ID);
 
@@ -339,7 +344,7 @@ namespace ResourceSensor
             int minY = cellY - this.Distance;
             int maxY = cellY + this.Distance;
 
-            int totalMass = 0;
+            float totalMass = 0;
             for (int x = minX; x <= maxX; x++)
             {
                 for (int y = minY; y <= maxY; y++)
@@ -371,7 +376,7 @@ namespace ResourceSensor
             return totalMass;
         }
 
-        private int CountRoom(Room room)
+        private float CountRoom(Room room)
         {
             float totalMass = 0f;
 
@@ -407,10 +412,10 @@ namespace ResourceSensor
                 }
             }
 
-            return (int)totalMass;
+            return totalMass;
         }
 
-        private int CountGlobal()
+        private float CountGlobal()
         {
             var tags = treeFilterable.AcceptedTags;
 
@@ -420,10 +425,10 @@ namespace ResourceSensor
             foreach (var tag in tags)
                 totalMass += worldInventory.GetTotalAmount(tag, false);
 
-            return (int)totalMass;
+            return totalMass;
         }
 
-        private int CountCell(int cell)
+        private float CountCell(int cell)
         {
             var tags = treeFilterable.AcceptedTags;
 
@@ -450,10 +455,10 @@ namespace ResourceSensor
                 }
             }
 
-            return (int)totalMass;
+            return totalMass;
         }
 
-        private int CountBuilding(GameObject obj)
+        private float CountBuilding(GameObject obj)
         {
             if (obj.TryGetComponent(out BuildingUnderConstruction _))
                 return 0;
@@ -483,7 +488,7 @@ namespace ResourceSensor
                 }
             }
 
-            return (int)totalMass;
+            return totalMass;
         }
     }
 }
