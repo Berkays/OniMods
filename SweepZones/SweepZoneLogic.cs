@@ -42,7 +42,7 @@ namespace SweepZones
                     {
                         Clearable clearable = obj2.GetComponent<Clearable>();
 
-                        if (clearable == null || !clearable.isClearable)
+                        if (clearable == null || !clearable.isClearable || clearable.PrefabID() == GameTags.Robots.Models.MorbRover)
                             continue;
 
                         var priorityValue = prioritySetting.priority_value;
