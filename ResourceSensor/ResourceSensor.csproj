@@ -62,7 +62,7 @@
       <Private>false</Private>
     </Reference>
     <Reference Include="PLib">
-      <HintPath>..\packages\PLib.4.13.0\lib\net471\PLib.dll</HintPath>
+      <HintPath>..\packages\PLib.4.16.0\lib\net471\PLib.dll</HintPath>
       <Private>false</Private>
     </Reference>
   </ItemGroup>
